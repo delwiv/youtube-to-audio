@@ -18,7 +18,7 @@
   "dependencies": {
     "autoprefixer": "^6.1.0",
     "babel-core": "^6.6.0",
-    "babel-eslint": "^5.0.0-beta6",
+    "babel-eslint": "^6.0.0-beta.1",
     "babel-loader": "^6.2.0",
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-plugin-react-intl": "^2.1.1",
@@ -76,6 +76,7 @@
     "jsdom": "^8.0.2",
     "less": "^2.5.1",
     "less-loader": "^2.0.0",
+    "lodash": "^4.6.1",
     "make-error": "^1.0.4",
     "nconf": "^0.8.1",
     "node-sass": "^3.1.2",
@@ -86,14 +87,15 @@
     "react-addons-test-utils": "^0.14.1",
     "react-dom": "^0.14.0",
     "react-helmet": "^2.1.1",
-    "react-intl": "^2.0.0-rc-1",
-    "react-native": "^0.20.0",
+    "react-intl": "^2.0.0-pr-1",
+    "react-native": "^0.21.0",
     "react-native-browser-polyfill": "^0.1.1",
     "react-native-side-menu": "^0.18.0",
     "react-pure-render": "^1.0.1",
     "react-redux": "^4.0.0",
     "react-router": "^2.0.0",
     "react-router-redux": "^4.0.0",
+    "react-sidebar": "^2.1.1",
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
     "redbox-react": "^1.0.5",
@@ -121,5 +123,9 @@
     "webpack-hot-middleware": "^2.8.1",
     "webpack-isomorphic-tools": "^2.2.24",
     "yargs": "^4.1.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^6.0.0-beta.1",
+    "eslint": "^2.3.0"
   }
 }

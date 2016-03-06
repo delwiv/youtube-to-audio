@@ -1,9 +1,6 @@
 import * as actions from './actions';
 import Todo from './todo';
-import {
-    Map,
-    Record
-} from 'immutable';
+import { Map, Record } from 'immutable';
 
 const InitialState = Record({
     map: new Map()

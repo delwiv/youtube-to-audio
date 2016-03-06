@@ -5,8 +5,10 @@
         "node": true,
         "mocha": true
     },
+    "parser": "babel-eslint",
     "rules": {
-        "default-case": 0, // Required default case is nonsense.
+        "max-len": [1, 150, 4],
+        "default-case": 0,
         "react/no-multi-comp": 0,
         "import/default": 0,
         "import/no-duplicates": 0,
@@ -21,7 +23,9 @@
         "no-console": 0,
         "no-alert": 0,
         "curly": 0,
-        "id-length": [2, {"min": 1}]
+        "id-length": [2, {
+            "min": 1
+        }]
     },
     "plugins": [
         "react", "import"
