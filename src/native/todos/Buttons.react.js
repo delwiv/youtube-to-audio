@@ -5,9 +5,7 @@ import buttonsMessages from '../../common/todos/buttonsMessages';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
-const {
-  PropTypes, StyleSheet, Text, TouchableOpacity, View
-} = React;
+const { PropTypes, StyleSheet, Text, TouchableOpacity, View } = React;
 
 const styles = StyleSheet.create({
   button: {

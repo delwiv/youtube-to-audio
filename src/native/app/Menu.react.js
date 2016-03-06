@@ -3,37 +3,35 @@ import React, { Dimensions } from 'react-native';
 import linksMessages from '../../common/app/linksMessages';
 import { injectIntl, intlShape } from 'react-intl';
 
-const {
-  PropTypes, ScrollView, StyleSheet, Text, View
-} = React;
+const { PropTypes, ScrollView, StyleSheet, Text, View } = React;
 
 const window = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#2C2C2C',
-    flex: 1,
-    height: window.height,
-    width: window.width * .7
-  },
-  menu: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingVertical: 20,
-    paddingHorizontal: 30
-  },
-  item: {
-    fontSize: 16,
-    padding: 10,
-    color: '#fff'
-  },
-  header: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 10,
-    marginBottom: 10
-  }
+    container: {
+        backgroundColor: '#2C2C2C',
+        flex: 1,
+        height: window.height,
+        width: window.width * 0.7
+    },
+    menu: {
+        // position: 'absolute',
+        justifyContent: 'space-between',
+        paddingVertical: 20,
+        paddingHorizontal: 30
+    },
+    item: {
+        fontSize: 16,
+        padding: 10,
+        color: '#fff'
+    },
+    header: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginLeft: 10,
+        marginBottom: 10
+    }
 });
 
 class Menu extends Component {
