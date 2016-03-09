@@ -13,6 +13,7 @@ import playlists from '../playlists/reducer';
 
 export default combineReducers({
     auth,
+    config,
     device,
     intl,
     reduxFields,
