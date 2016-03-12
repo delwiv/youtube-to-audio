@@ -1,9 +1,9 @@
 import Component from 'react-pure-render/component';
-import React, { Dimensions } from 'react-native';
+import React, {Dimensions} from 'react-native';
 import linksMessages from '../../common/app/linksMessages';
-import { injectIntl, intlShape } from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
 
-const { PropTypes, ScrollView, StyleSheet, Text, View } = React;
+const {PropTypes, ScrollView, StyleSheet, Text, View} = React;
 
 const window = Dimensions.get('window');
 
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#2C2C2C',
         flex: 1,
         height: window.height,
-        width: window.width * 0.7
+        // width: window.width * 0.7
     },
     menu: {
         // position: 'absolute',
@@ -36,37 +36,36 @@ const styles = StyleSheet.create({
 
 class Menu extends Component {
 
-  static propTypes = {
-    intl: intlShape.isRequired,
-    onRouteChange: PropTypes.func.isRequired
-  };
+    static propTypes = {
+        intl: intlShape.isRequired,
+        onRouteChange: PropTypes.func.isRequired
+    };
 
-  render() {
-    const { intl, onRouteChange } = this.props;
+    render() {
+        const {intl, onRouteChange} = this.props;
 
-    return (
-      <ScrollView
-        automaticallyAdjustContentInsets={false}
-        contentContainerStyle={styles.menu}
-        style={styles.container}
-      >
-        <View>
-          <Text
-            onPress={() => onRouteChange('home')} // eslint-disable-line react/jsx-no-bind
-            style={styles.item}
-          >{intl.formatMessage(linksMessages.home)}</Text>
-          <Text
-            onPress={() => onRouteChange('todos')} // eslint-disable-line react/jsx-no-bind
-            style={styles.item}
-          >{intl.formatMessage(linksMessages.todos)}</Text>
-          <Text
-            onPress={() => onRouteChange('intl')} // eslint-disable-line react/jsx-no-bind
-            style={styles.item}
-          >{intl.formatMessage(linksMessages.intl)}</Text>
-        </View>
-      </ScrollView>
-    );
-  }
+        return (
+            <ScrollView automaticallyAdjustContentInsets={false} contentContainerStyle={styles.menu} style={styles.container}>
+                <View>
+                    <Text onPress={() => onRouteChange('home')} // eslint-disable-line react/jsx-no-bind
+                        style={styles.item}>{intl.formatMessage(linksMessages.home)}
+                    </Text>
+                    <Text onPress={() => onRouteChange('todos')} // eslint-disable-line react/jsx-no-bind
+                        style={styles.item}>{intl.formatMessage(linksMessages.todos)}
+                    </Text>
+                    <Text onPress={() => onRouteChange('playlists')} // eslint-disable-line react/jsx-no-bind
+                        style={styles.item}>{intl.formatMessage(linksMessages.playlists)}
+                    </Text>
+                     <Text>{intl.formatMessage(linksMessages.todos)}</Text>
+			            <Text
+            				onPress={() => onRouteChange('intl')} // eslint-disable-line react/jsx-no-bind
+				            style={styles.item}
+			            >{intl.formatMessage(linksMessages.intl)}</Text>
+                </View>
+                {/* TODO: Switch language here. */}
+            </ScrollView>
+        );
+    }
 
 }
 
