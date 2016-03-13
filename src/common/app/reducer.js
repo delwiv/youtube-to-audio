@@ -6,7 +6,6 @@ import auth from '../auth/reducer';
 import config from '../config/reducer';
 import device from '../device/reducer';
 import intl from '../intl/reducer';
-import todos from '../todos/reducer';
 import ui from '../ui/reducer';
 import users from '../users/reducer';
 import playlists from '../playlists/reducer';
@@ -18,7 +17,6 @@ export default combineReducers({
     intl,
     reduxFields,
     routing,
-    todos,
     ui,
     users,
     playlists

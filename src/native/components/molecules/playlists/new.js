@@ -1,11 +1,14 @@
 import Component from 'react-pure-render/component';
-import React, { View, Text } from 'react-native';
+import React, { View, Text, PropTypes as T } from 'react-native';
 
 // import PlaylistService from '../../services/playlists';
 import InputText from '../../atoms/text-input';
 import Button from '../../atoms/button';
 
-export default class NewPlaylist extends Component {
+export default class NewPlaylistMolecule extends Component {
+    static propTypes = {
+        addPlaylist: T.func
+    };
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
@@ -29,10 +32,10 @@ export default class NewPlaylist extends Component {
         return (
             <View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View style={{ flex: 4 }}>
+                    <View style={{ flex: 3 }}>
                         <InputText ref="nameInput" placeholder={'Add a playlist'} onChange={this.handleChange} />
                     </View>
-                    <View style={{ flex: 1 }}><Button onPress={this.handleClick} text="Go !"/></View>
+                    <View style={{ flex: 1 }}><Button onPress={this.handleClick} text="GO"/></View>
                 </View>
             </View>
         );
