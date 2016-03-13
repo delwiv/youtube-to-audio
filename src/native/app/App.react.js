@@ -80,7 +80,6 @@ class App extends Component {
             <View style={[styles.sceneView, route.style]}>
                 <Header title={this.getTitle(route)} toggleSideMenu={toggleSideMenu}/>
                 <Drawer
-                    type="static"
                     ref={ ref => this.drawer = ref }
                     content={<Menu onRouteChange={this.onRouteChange} />}
                     openDrawerOffset={ 0.4 }
