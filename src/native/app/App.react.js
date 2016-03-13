@@ -107,4 +107,6 @@ class App extends Component {
 
 App = injectIntl(App);
 
-export default connect(state => ({device: state.device, ui: state.ui}), uiActions)(App);
+App = connect(state => ({ device: state.device, ui: state.ui }), uiActions)(App);
+
+export default start(App);
