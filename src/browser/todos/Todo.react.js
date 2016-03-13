@@ -20,7 +20,7 @@ export default class Todo extends Component {
 
   onButtonClick() {
     const { deleteTodo, todo } = this.props;
-    deleteTodo(todo.id);
+    deleteTodo(todo._id);
   }
 
   onTitleClick() {

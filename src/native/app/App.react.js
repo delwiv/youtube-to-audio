@@ -36,7 +36,7 @@ class App extends Component {
         this.renderScene = this.renderScene.bind(this);
     }
     componentDidMount() {
-        // this.drawer.open();
+        this.drawer.open();
     }
 
     componentWillReceiveProps(nextProps) {

@@ -1,8 +1,8 @@
 import Component from 'react-pure-render/component';
 import React, { View, PropTypes as T } from 'react-native';
 // import addItem from '../../../../common/playlists/actions';
-import InputText from '../../atoms/text-input';
-import Button from '../../atoms/button';
+import InputText from '../components/atoms/text-input';
+import Button from '../components/atoms/button';
 import { connect } from 'react-redux';
 import validator from 'validator';
 

@@ -42,8 +42,8 @@ function saveUserOnAuth(authData) {
     // With Firebase multi-path updates, we can update values at multiple
     // locations at the same time. Powerful feature for data denormalization.
     const promise = firebase.update({
-      [`users/${user.id}`]: user,
-      [`users-emails/${user.id}`]: { email }
+      [`users/${user._id}`]: user,
+      [`users-emails/${user._id}`]: { email }
     });
     return {
       type: 'REDUX_FIREBASE_SAVE_USER_ON_AUTH',

@@ -6,8 +6,8 @@ import React, { View, Text, PropTypes as T } from 'react-native';
 import appStyles from '../app/styles';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import NewItem from '../components/molecules/items/new-item';
-import ListItems from '../components/molecules/items/list-items';
+import NewItem from './new-item';
+import ListItems from './list-items';
 
 
 export default class Page extends Component {
@@ -20,25 +20,25 @@ export default class Page extends Component {
         this.addItem = this.addItem.bind(this);
     }
     addItem(item) {
-        const id = this.props.playlist.id;
+        const id = this.props.playlist._id;
         this.props.addItem({ id, item });
     }
     render() {
         const { playlist } = this.props;
         return (
             <View style={[appStyles.container]}>
-                <Text>{playlist.name}</Text>
-                <NewItem addItem={this.addItem}/>
-                {playlist.items && <ListItems items={playlist.items} />}
+                {playlist && <View>
+                    <Text>{playlist.name}</Text>
+                    <NewItem addItem={this.addItem}/>
+                    {playlist.items && <ListItems items={playlist.items} />}
+                </View>}
             </View>
         );
     }
 
 }
 
-export default connect(state => {
-    return { playlist: state.playlists.playlists[state.playlists.selected] };
- }, actions)(Page);
+export default connect(state => ({ playlist: state.playlists.map.get(state.playlists.selected) }), actions)(Page);
 
 
 // Truly universal (not only isomorphic) data fetching.

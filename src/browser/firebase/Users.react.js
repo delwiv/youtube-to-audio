@@ -26,7 +26,7 @@ class Users extends Component {
             <h3>Last {limitToLast} Logged In Users</h3>
             <ol>
               {users.map(user =>
-                <UserItem key={user.id} user={user} />
+                <UserItem key={user._id} user={user} />
               )}
             </ol>
           </div>
@@ -38,7 +38,7 @@ class Users extends Component {
 }
 
 Users = queryFirebase(Users, props => ({
-  // Query path to listen. For one user we can use `users/${props.user.id}`.
+  // Query path to listen. For one user we can use `users/${props.user._id}`.
   path: 'users',
   // Firebase imperative firebase.com/docs/web/api/query as declarative params.
   params: [

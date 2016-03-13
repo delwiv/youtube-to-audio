@@ -4,12 +4,12 @@ import _ from 'lodash';
 // import PlaylistService from '../../services/playlists';
 class RowPlaylist extends Component {
     static propTypes = {
-        id: T.number,
-        name: T.string,
-        items: T.object
+        playlist: T.object,
+        onClick: T.func
     };
     render() {
-        let size = _.size(this.props.items);
+        const { name, items } = this.props.playlist;
+        let size = items.count();
         if (size > 1)
             size += ' items';
         else
@@ -18,7 +18,7 @@ class RowPlaylist extends Component {
         return (
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: '#73CEE7', borderBottomWidth: 1, padding: 5 }}>
                 <View>
-                    <Text>{this.props.name}</Text>
+                    <Text>{name}</Text>
                 </View>
                 <View style={{ right: 0, alignSelf: 'center' }}>
                     <Text style={{ color: 'gray', fontSize: 10 }}>{size}</Text>
@@ -43,22 +43,38 @@ class ListPlaylistMolecule extends Component {
         this.onClick = this.onClick.bind(this);
     }
     componentWillReceiveProps(props) {
-        if (_.size(props.playlists) !== _.size(this.state.playlists))
-            this.setState({ playlists: props.playlists });
+        this.setState({ playlists: props.playlists });
     }
     onClick(id) {
         if (id !== undefined)
             this.props.onClick(id);
     }
     getDataSource() {
+        const playlists = [];
+        this.state.playlists.map(p => {
+            console.log(p);
+            const value = {
+                _id: p._id,
+                name: p.name,
+                url: p.url,
+                title: p.title,
+                items: p.items,
+                createdAt: p.createdAt
+            };
+            console.log(value);
+            playlists.push(value);
+        });
+        console.log(playlists);
         const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-        return ds.cloneWithRows(this.state.playlists);
+        return ds.cloneWithRows(playlists);
     }
     renderRow(playlist) {
+        if (!playlist)
+            return <View />;
         return (
-            <TouchableHighlight underlayColor="#73CEE7" onPress={ this.onClick.bind(this, playlist.id) }>
+            <TouchableHighlight underlayColor="#73CEE7" onPress={ this.onClick.bind(this, playlist._id) }>
                 <View>
-                    <RowPlaylist {...playlist} onClick={this.onClick} />
+                    <RowPlaylist playlist={playlist} onClick={this.onClick} />
                 </View>
             </TouchableHighlight>
         );
