@@ -2,8 +2,8 @@ import Component from 'react-pure-render/component';
 import React, { Dimensions } from 'react-native';
 import linksMessages from '../../common/app/linksMessages';
 import {injectIntl, intlShape} from 'react-intl';
-import NewPlaylist from '../components/molecules/new-playlist';
-import ListPlaylists from '../components/molecules/list-playlists';
+import NewPlaylist from '../playlists/new-playlist';
+import ListPlaylists from '../playlists/list-playlists';
 
 const { PropTypes, ScrollView, StyleSheet, Text, View } = React;
 
@@ -50,22 +50,7 @@ class Menu extends Component {
                 <View>
                     <NewPlaylist />
                     <ListPlaylists />
-                    {/*<Text onPress={() => onRouteChange('home')} // eslint-disable-line react/jsx-no-bind
-                        style={styles.item}>{intl.formatMessage(linksMessages.home)}
-                    </Text>
-                    <Text onPress={() => onRouteChange('todos')} // eslint-disable-line react/jsx-no-bind
-                        style={styles.item}>{intl.formatMessage(linksMessages.todos)}
-                    </Text>*/}
-                    {/*<Text onPress={() => onRouteChange('playlists')} // eslint-disable-line react/jsx-no-bind
-                        style={styles.item}>{intl.formatMessage(linksMessages.playlists)}
-                    </Text>*/}
-                     <Text>{intl.formatMessage(linksMessages.todos)}</Text>
-			            <Text
-            				onPress={() => onRouteChange('intl')} // eslint-disable-line react/jsx-no-bind
-				            style={styles.item}
-			            >{intl.formatMessage(linksMessages.intl)}</Text>
                 </View>
-                {/* TODO: Switch language here. */}
             </ScrollView>
         );
     }
