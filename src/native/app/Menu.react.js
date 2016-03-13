@@ -11,10 +11,9 @@ const window = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#2C2C2C',
+        backgroundColor: '#fff',
         flex: 1,
-        height: window.height,
-        // width: window.width * 0.7
+        height: window.height
     },
     menu: {
         // position: 'absolute',

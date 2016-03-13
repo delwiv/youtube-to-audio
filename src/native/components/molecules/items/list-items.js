@@ -76,7 +76,7 @@ class ListItems extends Component {
     static propTypes = {
         items: T.object,
         selectItem: T.func,
-        selected: T.integer
+        selected: T.number
     };
     constructor(props) {
         super(props);
