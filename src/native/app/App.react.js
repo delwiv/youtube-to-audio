@@ -2,7 +2,7 @@ import * as uiActions from '../../common/ui/actions';
 import Component from 'react-pure-render/component';
 import Header from './Header.react';
 import Menu from './Menu.react';
-import React, { Navigator, PropTypes, StatusBarIOS, View } from 'react-native';
+import React, { Navigator, PropTypes, View, ScrollView } from 'react-native';
 // import SideMenu from 'react-native-side-menu';
 import Drawer from 'react-native-drawer'
 import linksMessages from '../../common/app/linksMessages';
@@ -35,12 +35,17 @@ class App extends Component {
         this.onSideMenuChange = this.onSideMenuChange.bind(this);
         this.renderScene = this.renderScene.bind(this);
     }
+    componentDidMount() {
+        // this.drawer.open();
+    }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.ui.isSideMenuOpen && !nextProps.ui.isSideMenuOpen)
-            this.refs.drawer.close();
+            this.drawer.close();
         else if (!this.props.ui.isSideMenuOpen && nextProps.ui.isSideMenuOpen)
-            this.refs.drawer.open();
+            this.drawer.open();
+        console.log(nextProps.ui.isSideMenuOpen);
+        console.log(this.drawer);
     }
 
     onNavigatorRef(component) {
@@ -57,7 +62,7 @@ class App extends Component {
     }
 
     getTitle(route) {
-        const {intl} = this.props;
+        const { intl } = this.props;
         switch (route) {
         case routes.home:
             return intl.formatMessage(linksMessages.home);
@@ -70,31 +75,32 @@ class App extends Component {
     }
 
     renderScene(route) {
-        const {toggleSideMenu} = this.props;
+        const { toggleSideMenu, ui } = this.props;
         return (
             <View style={[styles.sceneView, route.style]}>
                 <Header title={this.getTitle(route)} toggleSideMenu={toggleSideMenu}/>
-                <route.Page/>
+                <Drawer
+                    type="static"
+                    ref={ ref => this.drawer = ref }
+                    content={<Menu onRouteChange={this.onRouteChange} />}
+                    openDrawerOffset={ 0.4 }
+                    closedDrawerOffset={ 0.2 }
+                    styles={{ main: { shadowColor: '#000000', shadowOpacity: 0.4, shadowRadius: 3 } }}
+                    tweenHandler={Drawer.tweenPresets.parallax}
+                >
+                    <ScrollView style={{ padding: 10, marginBottom: 5 }}>
+                        <route.Page />
+                    </ScrollView>
+                </Drawer>
             </View>
         );
     }
 
     render() {
-        const { ui } = this.props;
 
         return (
-            <Drawer
-                ref="drawer"
-                type="static"
-                content={<Menu onRouteChange={this.onRouteChange} />}
-                openDrawerOffset={ 100 }
-                closedDrawerOffset={ 0 }
-                styles={{ main: { shadowColor: '#000000', shadowOpacity: 0.4, shadowRadius: 3 } }}
-                tweenHandler={Drawer.tweenPresets.parallax}
-            >
-                <Navigator configureScene={App.configureScene}
-                    initialRoute={routes.home} ref={this.onNavigatorRef} renderScene={this.renderScene} style={styles.container} />
-            </Drawer>
+            <Navigator configureScene={App.configureScene}
+                initialRoute={routes.playlists} ref={this.onNavigatorRef} renderScene={this.renderScene} style={styles.container} />
         );
     }
 
