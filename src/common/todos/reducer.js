@@ -8,9 +8,7 @@ const InitialState = Record({
 const initialState = new InitialState;
 
 // Note how JSON from server is revived to immutable record.
-const revive = ({
-    map
-}) => initialState.merge({
+const revive = ({ map }) => initialState.merge({
     map: new Map(map).map(todo => new Todo(todo))
 });
 
@@ -20,14 +18,14 @@ export default function todosReducer(state = initialState, action) {
     switch (action.type) {
     case actions.ADD_HUNDRED_TODOS: {
         const todos = action.payload.reduce((t, json) =>
-            t.set(json.id, new Todo(json)), new Map());
+            t.set(json._id, new Todo(json)), new Map());
         return state.update('map', map => map.merge(todos));
     }
 
     case actions.ADD_TODO: {
         const todo = new Todo(action.payload);
         return state
-            .update('map', map => map.set(todo.id, todo));
+            .update('map', map => map.set(todo._id, todo));
     }
 
     case actions.CLEAR_ALL_COMPLETED_TODOS: {
@@ -56,7 +54,7 @@ export default function todosReducer(state = initialState, action) {
             todo
         } = action.payload;
         return state
-            .updateIn(['map', todo.id, 'completed'], completed => !completed);
+            .updateIn(['map', todo._id, 'completed'], completed => !completed);
     }
 
     }

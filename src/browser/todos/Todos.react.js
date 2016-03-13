@@ -39,7 +39,7 @@ class Todos extends Component {
             deleteTodo={deleteTodo}
             todo={todo}
             toggleTodoCompleted={toggleTodoCompleted}
-            key={todo.id}
+            key={todo._id}
           />
         )}
       </ol>

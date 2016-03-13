@@ -19,7 +19,7 @@ describe('todos actions', () => {
     const { type, payload } = action;
     expect(type).equal('ADD_TODO');
     expect(payload.createdAt).equal('now');
-    expect(payload.id).equal('uid');
+    expect(payload._id).equal('uid');
     expect(payload.title).equal('Hello');
   });
 });

@@ -10,7 +10,7 @@ const todo = new Todo({
   title: 'Relax...'
 });
 const todos = {
-  [todo.id]: todo
+  [todo._id]: todo
 };
 
 router.route('/user')

@@ -63,7 +63,7 @@ export default function queryFirebase(Wrapped, mapPropsToOptions) {
     dispatch(props, callback) {
       const options = mapPropsToOptions(props);
       // When any prop is not yet loaded, we can postpone loading easily.
-      // Example: { path: product && `products/${product.id}`, ... }
+      // Example: { path: product && `products/${product._id}`, ... }
       if (!options.path) return;
       this.context.store.dispatch(({ firebase }) => {
         invariant(firebase instanceof Firebase,

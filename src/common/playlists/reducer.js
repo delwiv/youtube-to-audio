@@ -1,50 +1,52 @@
-import {
-    handleActions
-} from 'redux-actions';
-import _ from 'lodash';
+import { handleActions } from 'redux-actions';
+import Item from './item';
+import Playlist from './playlist';
+import { Record, Map } from 'immutable';
+import shortid from 'shortid';
+
+const initialItem = new Item({
+    name: 'Empty item',
+    createdAt: new Date(),
+    _id: shortid.generate()
+});
+
+const initialPlaylist = new Playlist({
+    name: 'Default playlist',
+    createdAt: new Date(),
+    _id: shortid.generate(),
+    items: new Map().set(initialItem._id, initialItem)
+});
+
+const InitialState = Record({
+    map: new Map().set(initialPlaylist._id, initialPlaylist),
+    selected: initialPlaylist._id
+});
+
+const initialState = new InitialState;
+
+const revive = ({ map }) => initialState.merge({
+    map: new Map(map).map(playlist => new Playlist(playlist))
+});
 
 export default handleActions({
     ADD_PLAYLIST: (state, action) => {
-        const newId = _.size(state.playlists);
-        return {
-            ...state,
-            playlists: {
-                ...state.playlists,
-                [newId]: {...action.payload,
-                    id: newId,
-                    items: {}
-                }
-            }
-        };
+        const playlist = new Playlist(action.payload);
+        // console.log(playlist);
+        return state
+            .update('map', map => map.set(playlist._id, playlist));
     },
     SELECT_PLAYLIST: (state, action) => {
-        return {
-            ...state,
-            selected: action.payload
-        };
+        return state.set('selected', action.payload);
     },
     ADD_ITEM: (state, action) => {
-        const {
-            id,
-            item
-        } = action.payload;
-        const selected = state.playlists[id];
-        const newId = _.size(selected.items);
-        item.id = newId;
-
-        return {
-            ...state,
-            playlists: {
-                ...state.playlists,
-                [id]: {
-                    ...selected,
-                    items: {
-                        ...selected.items,
-                        [newId]: { ...item }
-                    }
-                }
-            }
-        };
+        const { id, item } = action.payload;
+        console.log(action.payload);
+        // const playlist = state.map.get(id);
+        // const items = playlist.items.set(item._id, item);
+        return state
+            .update('map', map => map
+                .update(id, playlist => playlist
+                    .update('items', i => i.set(item._id, item))));
     },
     SELECT_ITEM: (state, action) => {
         return {
@@ -52,13 +54,4 @@ export default handleActions({
             selectedItem: action.payload
         };
     }
-}, {
-    playlists: {
-        0: {
-            name: 'Add a new list !',
-            id: 0,
-            items: {}
-        }
-    },
-    selected: 0
-});
+}, initialState);
