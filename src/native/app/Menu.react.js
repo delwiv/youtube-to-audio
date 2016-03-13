@@ -1,9 +1,11 @@
 import Component from 'react-pure-render/component';
-import React, {Dimensions} from 'react-native';
+import React, { Dimensions } from 'react-native';
 import linksMessages from '../../common/app/linksMessages';
 import {injectIntl, intlShape} from 'react-intl';
+import NewPlaylist from '../components/molecules/new-playlist';
+import ListPlaylists from '../components/molecules/list-playlists';
 
-const {PropTypes, ScrollView, StyleSheet, Text, View} = React;
+const { PropTypes, ScrollView, StyleSheet, Text, View } = React;
 
 const window = Dimensions.get('window');
 
@@ -18,7 +20,7 @@ const styles = StyleSheet.create({
         // position: 'absolute',
         justifyContent: 'space-between',
         paddingVertical: 20,
-        paddingHorizontal: 30
+        paddingHorizontal: 5
     },
     item: {
         fontSize: 16,
@@ -47,15 +49,17 @@ class Menu extends Component {
         return (
             <ScrollView automaticallyAdjustContentInsets={false} contentContainerStyle={styles.menu} style={styles.container}>
                 <View>
-                    <Text onPress={() => onRouteChange('home')} // eslint-disable-line react/jsx-no-bind
+                    <NewPlaylist />
+                    <ListPlaylists />
+                    {/*<Text onPress={() => onRouteChange('home')} // eslint-disable-line react/jsx-no-bind
                         style={styles.item}>{intl.formatMessage(linksMessages.home)}
                     </Text>
                     <Text onPress={() => onRouteChange('todos')} // eslint-disable-line react/jsx-no-bind
                         style={styles.item}>{intl.formatMessage(linksMessages.todos)}
-                    </Text>
-                    <Text onPress={() => onRouteChange('playlists')} // eslint-disable-line react/jsx-no-bind
+                    </Text>*/}
+                    {/*<Text onPress={() => onRouteChange('playlists')} // eslint-disable-line react/jsx-no-bind
                         style={styles.item}>{intl.formatMessage(linksMessages.playlists)}
-                    </Text>
+                    </Text>*/}
                 </View>
                 {/* TODO: Switch language here. */}
             </ScrollView>
