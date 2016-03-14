@@ -14,7 +14,7 @@ class RowItem extends Component {
     render() {
         const { item } = this.props;
         const winWidth = Dimensions.get('window').width;
-        const statusWidth = winWidth * 0.8 * 0.6;
+        const statusWidth = winWidth * 0.62;
         return (
             <View style={{
                 flexDirection: 'column',
@@ -38,9 +38,9 @@ class RowItem extends Component {
                 <View style={{ flexDirection: 'row', height: 80, paddingTop: 10 }}>
                     {/* <Image style={{ flex: 1 }} />*/}
                     <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 5 }} />
-                    <View style={{ flex: 2, flexDirection: 'column', marginLeft: 5, width: statusWidth }}>
+                    <View style={{ flex: 2, flexDirection: 'column', paddingLeft: 5, width: statusWidth }}>
                         <View>
-                            <Bar progress={item.progress} style={{ width: statusWidth }} />
+                            <Bar progress={item.progress} indeterminate={item.progress === 0} width={statusWidth} />
                         </View>
                         <View style={{ flexDirection: 'row',
                             justifyContent: 'space-between',
@@ -52,6 +52,8 @@ class RowItem extends Component {
                         </View>
                         <View style={{ flexDirection: 'row',
                             justifyContent: 'space-between',
+                            alignItems: 'center',
+                            flexWrap: 'nowrap',
                             marginTop: 5
                          }}
                         >
@@ -90,7 +92,6 @@ class ListItems extends Component {
     getDataSource() {
         const items = [];
         this.props.items.map(i => {
-            console.log(i);
             const value = {
                 createdAt: i.createdAt,
                 duration: i.duration,
@@ -100,7 +101,6 @@ class ListItems extends Component {
                 status: i.status,
                 url: i.url
             };
-            console.log(value);
             items.push(value);
         });
         const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });

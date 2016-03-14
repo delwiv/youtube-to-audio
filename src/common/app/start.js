@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { onAppComponentDidMount } from './actions';
 
 export default function start(Wrapped) {
-  class Start extends Component {
+    class Start extends Component {
 
     static propTypes = {
       currentLocale: PropTypes.string.isRequired,
@@ -13,10 +13,10 @@ export default function start(Wrapped) {
       messages: PropTypes.object.isRequired
     };
 
-    componentDidMount() {
-      const { dispatch } = this.props;
-      dispatch(onAppComponentDidMount());
-    }
+        componentDidMount() {
+            const { dispatch } = this.props;
+            dispatch(onAppComponentDidMount());
+        }
 
     render() {
       const { currentLocale, messages } = this.props;

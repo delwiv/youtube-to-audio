@@ -52,7 +52,6 @@ class ListPlaylistMolecule extends Component {
     getDataSource() {
         const playlists = [];
         this.state.playlists.map(p => {
-            console.log(p);
             const value = {
                 _id: p._id,
                 name: p.name,
@@ -61,10 +60,8 @@ class ListPlaylistMolecule extends Component {
                 items: p.items,
                 createdAt: p.createdAt
             };
-            console.log(value);
             playlists.push(value);
         });
-        console.log(playlists);
         const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         return ds.cloneWithRows(playlists);
     }
