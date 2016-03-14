@@ -5,9 +5,12 @@ import { Record, Map } from 'immutable';
 import shortid from 'shortid';
 
 const initialItem = new Item({
-    name: 'Empty item',
+    name: 'Example item',
     createdAt: new Date(),
-    _id: shortid.generate()
+    _id: shortid.generate(),
+    status: 'Downloading...',
+    progress: 0.53,
+    duration: 222
 });
 
 const initialPlaylist = new Playlist({
@@ -31,7 +34,6 @@ const revive = ({ map }) => initialState.merge({
 export default handleActions({
     ADD_PLAYLIST: (state, action) => {
         const playlist = new Playlist(action.payload);
-        // console.log(playlist);
         return state
             .update('map', map => map.set(playlist._id, playlist));
     },
@@ -40,9 +42,6 @@ export default handleActions({
     },
     ADD_ITEM: (state, action) => {
         const { id, item } = action.payload;
-        console.log(action.payload);
-        // const playlist = state.map.get(id);
-        // const items = playlist.items.set(item._id, item);
         return state
             .update('map', map => map
                 .update(id, playlist => playlist

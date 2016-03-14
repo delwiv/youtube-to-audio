@@ -13,11 +13,16 @@ nconf.env('__');
 // Remember, never put secrets in this file. To override default values for
 // production, use environment variables.
 nconf.defaults({
-  firebaseUrl: 'https://este.firebaseio.com',
-  googleAnalyticsId: 'UA-XXXXXXX-X',
-  isProduction,
-  locales: ['cs', 'en'],
-  port: process.env.PORT || 8000
+    firebaseUrl: 'https://este.firebaseio.com',
+    googleAnalyticsId: 'UA-XXXXXXX-X',
+    isProduction,
+    locales: ['cs', 'en'],
+    port: process.env.PORT || 8000,
+    mongo: {
+        db: 'youtube2mp3',
+        host: '127.0.0.1',
+        port: 27017
+    }
 });
 
 export default nconf.get();

@@ -9,31 +9,32 @@ const rootDir = require('path').resolve(__dirname, '..', '..');
 const webpackIsomorphicAssets = require('../../webpack/assets');
 
 if (!process.env.NODE_ENV) {
-  throw new Error(
-    'Environment variable NODE_ENV must be set to development or production.'
-  );
+    throw new Error(
+        'Environment variable NODE_ENV must be set to development or production.'
+    );
 }
+
 
 // https://github.com/yahoo/intl-locales-supported#usage
 if (global.Intl) {
-  // Determine if the built-in `Intl` has the locale data we need.
-  if (!areIntlLocalesSupported(config.locales)) {
-    // `Intl` exists, but it doesn't have the data we need, so load the
-    // polyfill and replace the constructors we need with the polyfill's.
-    require('intl');
-    Intl.NumberFormat = IntlPolyfill.NumberFormat; // eslint-disable-line no-undef
-    Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat; // eslint-disable-line no-undef
-  }
+    // Determine if the built-in `Intl` has the locale data we need.
+    if (!areIntlLocalesSupported(config.locales)) {
+        // `Intl` exists, but it doesn't have the data we need, so load the
+        // polyfill and replace the constructors we need with the polyfill's.
+        require('intl');
+        Intl.NumberFormat = IntlPolyfill.NumberFormat; // eslint-disable-line no-undef
+        Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat; // eslint-disable-line no-undef
+    }
 } else {
-  // No `Intl`, so use and load the polyfill.
-  global.Intl = require('intl');
+    // No `Intl`, so use and load the polyfill.
+    global.Intl = require('intl');
 }
 
 // http://bluebirdjs.com/docs/why-bluebird.html
 global.Promise = Bluebird;
 
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(webpackIsomorphicAssets)
-  .development(!config.isProduction)
-  .server(rootDir, () => {
-    require('./main');
-  });
+    .development(!config.isProduction)
+    .server(rootDir, () => {
+        require('./main');
+    });

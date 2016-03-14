@@ -5,33 +5,33 @@ import { connect } from 'react-redux';
 import { onAppComponentDidMount } from './actions';
 
 export default function start(Wrapped) {
-  class Start extends Component {
+    class Start extends Component {
 
-    static propTypes = {
-      currentLocale: PropTypes.string.isRequired,
-      dispatch: PropTypes.func.isRequired
-    };
+        static propTypes = {
+            currentLocale: PropTypes.string.isRequired,
+            dispatch: PropTypes.func.isRequired
+        };
 
-    componentDidMount() {
-      const { dispatch } = this.props;
-      dispatch(onAppComponentDidMount());
+        componentDidMount() {
+            const { dispatch } = this.props;
+            dispatch(onAppComponentDidMount());
+        }
+
+
+
+        render() {
+            const { currentLocale } = this.props;
+
+            return (
+                <IntlProvider locale={currentLocale}>
+                    <Wrapped {...this.props}/>
+                </IntlProvider>
+            );
+        }
+
     }
 
-    render() {
-      const { currentLocale } = this.props;
+    Start = connect(state => ({ currentLocale: state.intl.currentLocale, token: state.auth.token }))(Start);
 
-      return (
-        <IntlProvider locale={currentLocale}>
-          <Wrapped {...this.props} />
-        </IntlProvider>
-      );
-    }
-
-  }
-
-  Start = connect(state => ({
-    currentLocale: state.intl.currentLocale
-  }))(Start);
-
-  return Start;
+    return Start;
 }

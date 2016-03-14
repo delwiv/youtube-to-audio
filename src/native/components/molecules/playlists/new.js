@@ -32,10 +32,10 @@ export default class NewPlaylistMolecule extends Component {
         return (
             <View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View style={{ flex: 3 }}>
+                    <View style={{ flex: 5 }}>
                         <InputText ref="nameInput" placeholder={'Add a playlist'} onChange={this.handleChange} />
                     </View>
-                    <View style={{ flex: 1 }}><Button onPress={this.handleClick} text="GO"/></View>
+                    <View style={{ flex: 2 }}><Button onPress={this.handleClick} text="GO"/></View>
                 </View>
             </View>
         );

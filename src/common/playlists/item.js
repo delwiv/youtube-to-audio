@@ -8,6 +8,9 @@ const Item = Record({
     videoId: '',
     title: '',
     starred: false,
+    duration: 0,
+    status: 'Pending...',
+    progress: 0,
     currentState: new Record({
         name: 'Pending...',
         createdAt: '',
