@@ -7,7 +7,7 @@ import { logout } from '../auth/actions';
 import { updateAppStateFromStorage } from './actions';
 
 export default function start(Wrapped) {
-  class Start extends Component {
+    class Start extends Component {
 
     static propTypes = {
       currentLocale: PropTypes.string.isRequired,

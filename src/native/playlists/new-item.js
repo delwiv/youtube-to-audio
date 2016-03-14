@@ -38,8 +38,8 @@ class NewItem extends Component {
             url: this.state.url,
             name: this.state.url,
             duration: Math.random() * (500 - 100) + 100,
-            progress: Math.floor(Math.random() * (100 - 1) + 1) / 100,
-            status: 'Downloading...'
+            progress: 0,
+            status: 'Pending...'
         }
         this.props.addItem(newItem);
         this.setState({ url: '' });

@@ -1,16 +1,16 @@
-import auth from './auth';
+import users from './users';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
-import todos from './todos';
+import playlists from './playlists';
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/auth', auth);
-app.use('/todos', todos);
+app.use('/users', users);
+app.use('/playlists', playlists);
 
 app.on('mount', () => {
   console.log('Api is available at %s', app.mountpath);
