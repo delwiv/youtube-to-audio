@@ -4,11 +4,13 @@ import shortid from 'shortid';
 import jwt from 'jsonwebtoken';
 import User from '../api/users/user';
 
-const SEVEN_DAY_MIN = 10080;
-const SEVEN_DAYS_SEC = SEVEN_DAY_MIN * 60;
+const SEVEN_DAYS = 604800;
 
 const TokenSchema = mongoose.Schema({
-    createdAt: Date,
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
     secret: String
 });
 
@@ -17,51 +19,61 @@ TokenSchema.statics.getSecret = function() {
     .then(data => Promise.resolve(data[0].secret))
 }
 
-const Token = mongoose.model('Token', Token);
+const Token = mongoose.model('Token', TokenSchema);
 
-console.log('Search secret in Mongo...');
-Token.find().exec().then(data => !data ? Token.create({ secret: shortid.generate() }) : Promise.resolve(data[0]))
+Token.find().exec().then(data => !data.length ? Token.create({ secret: shortid.generate() }) : Promise.resolve(data[0]))
     .then(token => console.log(`Token was created on ${token.createdAt}`));
 
 const redisClient = redis.createClient();
 
 export default function security(app) {
     if (!app.secret) {
-        Token.getSecret.then(secret => {
+        Token.getSecret().then(secret => {
             app.secret = secret;
         });
     }
 
     return (req, res, next) => {
-        console.log(req.route, req.body.token);
-        if (!req.body.token) {
-            if (req.route === '/api/v1/touch') {
+        console.log(`${req.path} -- ${new Date()}`);
+        if (!req.headers || !req.headers.authorization) {
+            if (req.path === '/api/v1/touch') {
                 User.createAnonymous().then(user => {
                     const token = jwt.sign({ email: 'anonymous', date: new Date() }, app.secret, {
-                        expiresInMinutes: SEVEN_DAY_MIN
+                        expiresIn: SEVEN_DAYS
                     });
-                    redisClient.hset(`token:${token}`, user._id);
-                    redisClient.expire(`token:${token}`, SEVEN_DAYS_SEC);
-                    return res.json({ token, user });
+                    const key = `token:${token}`;
+                    const userId = JSON.stringify(user._id);
+                    console.log('saving token in redis...');
+                    redisClient.set(key, userId, () => {
+                        redisClient.expire(key, SEVEN_DAYS, () => {
+                            res.json({ token, user });
+                        });
+                    });
                 });
-            } else
+            } else {
                 return res.status(401).end();
+            }
         } else {
+            const token = req.token = req.headers.authorization;
             redisClient.get(`token:${req.token}`, (err, id) => {
-                if (err)
-                    console.log(err);
-                if (!id)
+                if (!id) {
+                    console.log('id not found in redis : ' + req.token);
                     return res.status(401).end();
+                }
                 jwt.verify(req.token, app.secret, (errVerify, decoded) => {
-                    if (errVerify)
+                    if (errVerify) {
+                        console.log('token failed to verify with jwt ' + errVerify);
                         return res.status(401).end();
-                    return User.findById(id).exec()
+                    }
+                    return User.findById(JSON.parse(id)).exec()
                     .then(user => {
-                        if (!user)
-                            return res.status(404).end();
+                        console.log('user found: ' + user.name + ' ' + user._id);
                         req.user = user;
-                        redisClient.expire(`token:${req.token}`, SEVEN_DAYS_SEC);
-                        return next();
+                        redisClient.expire(`token:${req.token}`, SEVEN_DAYS, () => {
+                            if (req.path === '/api/v1/touch')
+                                return res.json({ token, user });
+                            return next();
+                        });
                     });
                 });
             });

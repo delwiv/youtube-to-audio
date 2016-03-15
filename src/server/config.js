@@ -23,6 +23,7 @@ nconf.defaults({
     isProduction,
     locales: ['cs', 'en', 'fr', 'ro'],
     port: process.env.PORT || 8000,
+    api: 'http://localhost:8000',
     mongo: {
         db: 'youtube2mp3',
         host: '127.0.0.1',

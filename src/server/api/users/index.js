@@ -21,11 +21,11 @@ router.post('/logout', (req, res) => {
     return res.status(203).end();
 });
 
-router.post('/me', (req, res) => {
+router.get('/me', (req, res) => {
     // console.log(req.session);
-    if (req.session.user)
-        return res.json(req.session.user);
-    return res.status(401).end();
+    req.user.populate({ path: 'playlists', model: 'Playlist', select: 'name items' })
+        .execPopulate()
+        .then(() => req.json(req.user));
 })
 
 
