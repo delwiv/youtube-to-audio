@@ -34,6 +34,7 @@ export default function security(app) {
     }
 
     return (req, res, next) => {
+        console.log('');
         console.log(`${req.path} -- ${new Date()}`);
         if (!req.headers || !req.headers.authorization) {
             if (req.path === '/api/v1/touch') {

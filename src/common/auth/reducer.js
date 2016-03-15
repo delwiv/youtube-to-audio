@@ -14,7 +14,7 @@ const initialState = new InitialState;
 export default handleActions({
     AUTH_SET_TOKEN: (state, action) => {
         console.log(state);
-        return state.update('user', user => user.set('token', action.payload))
+        return state.update('user', user => user.set('token', action.payload));
     },
     AUTH_RM_TOKEN: (state) => state.delete('user'),
     AUTH_TOUCH_ERROR: (state) => state.delete('user'),
