@@ -21,7 +21,8 @@ class App extends Component {
         device: T.object.isRequired,
         intl: intlShape.isRequired,
         ui: T.object.isRequired,
-        user: T.object
+        user: T.object,
+        touch: T.func
     };
 
     static configureScene(route) {
@@ -48,14 +49,6 @@ class App extends Component {
         // this._touchApi();
     }
 
-    getToken() {
-        return AsyncStorage.getItem('Y2M:TOKEN').then(token => {
-            return Promise.resolve(token);
-        });
-    }
-
-
-
     componentWillReceiveProps(nextProps) {
         if (this.props.ui.isSideMenuOpen && !nextProps.ui.isSideMenuOpen)
             this.drawer.close();
@@ -67,6 +60,7 @@ class App extends Component {
             this.rmToken().then(this.props.rmToken);
         }
         else if (!this.props.user && nextProps.user) {
+            console.log(nextProps.user);
             console.log('need to save token ');
             this.saveToken(nextProps.user.token);
         }
@@ -98,6 +92,13 @@ class App extends Component {
         throw new Error('Route not found.');
     }
 
+    getToken() {
+        return AsyncStorage.getItem('Y2M:TOKEN');
+        // .then(token => {
+        //     return Promise.resolve(token);
+        // });
+    }
+
     rmToken() {
         return AsyncStorage.removeItem('Y2M:TOKEN');
     }
@@ -107,7 +108,9 @@ class App extends Component {
     }
 
     refresh(token) {
-        this.props.touch(token || this.props.token);
+        console.log(token);
+        const fallback = this.props.user ? this.props.user.token : null;
+        this.props.touch(token || fallback);
     }
 
     renderScene(route) {
