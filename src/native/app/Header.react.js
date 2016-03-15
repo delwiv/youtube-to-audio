@@ -19,14 +19,16 @@ const styles = StyleSheet.create({
         borderBottomColor: '#73CEE7',
         borderBottomWidth: 2,
         height: 70,
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         paddingBottom: 10,
         paddingTop: 30,
         position: 'relative'
     },
     header: {
         color: '#fff',
-        fontSize: 20
+        fontSize: 20,
+        alignSelf: 'center',
+        flex: 1
     }
     // menuIcon: {
     //     backgroundColor: 'transparent',
@@ -67,9 +69,18 @@ export default class Header extends Component {
 
         return (
             <View style={styles.container}>
-                {username && <Text style={{ position: 'absolute', left: 15, color: 'white' }}>{username}</Text>}
-                <Text style={styles.header}>{title}</Text>
-                <Icon style={{ position: 'absolute', right: 15 }} name="refresh" size={24} color="white" onPress={this.refresh} />
+                <View style={{ flex: 1, flexDirection: 'column' }}>
+                    {username && <View style={{ alignItems: 'center' }}>
+                        <Text style={{ color: 'white', marginLeft: 15, fontSize: 10 }}>Logged in as</Text>
+                        <Text style={{ color: 'white', marginLeft: 15 }}>{username}</Text>
+                    </View>}
+                </View>
+                <View style={{ flex: 2 }}>
+                    <Text style={styles.header}>{title}</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                    <Icon style={{ alignSelf: 'flex-end', marginRight: 15 }} name="refresh" size={24} color="white" onPress={this.refresh} />
+                </View>
             </View>
         );
     }
