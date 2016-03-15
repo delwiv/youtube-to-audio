@@ -40,7 +40,7 @@ User.statics.login = function(creds) {
 User.statics.createAnonymous = function() {
     const user = new this({
         name: 'Anonymous',
-        createdAt: new Date.UTC(),
+        createdAt: new Date(),
         anonymous: true
     });
 

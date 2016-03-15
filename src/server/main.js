@@ -3,6 +3,9 @@ import config from '../common/config';
 import errorHandler from './lib/errorHandler';
 import express from 'express';
 import frontend from './frontend';
+import security from './lib/security';
+import bodyParser from 'body-parser';
+
 const mongoose = require('mongoose');
 
 const app = express();
@@ -17,6 +20,10 @@ const initDB = () => new Promise((resolve) => {
     });
 });
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(security(app));
 app.use('/api/v1', api);
 app.use(frontend);
 app.use(errorHandler);

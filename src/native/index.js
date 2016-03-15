@@ -6,31 +6,33 @@ import configureStore from '../common/configureStore';
 import { Provider } from 'react-redux';
 
 export default function index() {
-  // TODO: Use common/config.
-  const initialState = {
-    config: {
-      firebaseUrl: 'https://este.firebaseio.com'
-    },
-    intl: {
-      locales: ['cs', 'en'],
-      currentLocale: 'en'
-    },
-    device: {
-      isMobile: true,
-      platform: Platform.OS
-    }
-  };
-  const store = configureStore({ initialState });
+    // TODO: Use common/config.
+    const initialState = {
+        config: {
+            firebaseUrl: 'https://este.firebaseio.com'
+        },
+        intl: {
+            locales: [
+                'cs', 'en'
+            ],
+            currentLocale: 'en'
+        },
+        device: {
+            isMobile: true,
+            platform: Platform.OS
+        }
+    };
+    const store = configureStore({initialState});
 
-  class Root extends Component {
-    render() {
-      return (
-        <Provider store={store}>
-          <App />
-        </Provider>
-      );
+    class Root extends Component {
+        render() {
+            return (
+                <Provider store={store}>
+                    <App/>
+                </Provider>
+            );
+        }
     }
-  }
 
-  AppRegistry.registerComponent('Este', () => Root);
+    AppRegistry.registerComponent('Este', () => Root);
 }

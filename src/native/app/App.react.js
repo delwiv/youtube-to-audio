@@ -1,17 +1,15 @@
-import * as uiActions from '../../common/ui/actions';
 import Component from 'react-pure-render/component';
 import Header from './Header.react';
 import Menu from './Menu.react';
-import React, { Navigator, PropTypes, View, ScrollView, AsyncStorage } from 'react-native';
-// import SideMenu from 'react-native-side-menu';
-import Drawer from 'react-native-drawer'
+import React, { Navigator, PropTypes as T, View, ScrollView, AsyncStorage } from 'react-native';
+import Drawer from 'react-native-drawer';
 import linksMessages from '../../common/app/linksMessages';
 import routes from '../routes';
 import styles from './styles';
 import start from '../../common/app/start';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
-import { touch } from '../../common/auth/actions';
+import * as authActions from '../../common/auth/actions';
 
 
 // import Sidebar from 'react-sidebar';
@@ -20,11 +18,10 @@ import { touch } from '../../common/auth/actions';
 class App extends Component {
 
     static propTypes = {
-        device: PropTypes.object.isRequired,
+        device: T.object.isRequired,
         intl: intlShape.isRequired,
-        onSideMenuChange: PropTypes.func.isRequired,
-        toggleSideMenu: PropTypes.func.isRequired,
-        ui: PropTypes.object.isRequired
+        ui: T.object.isRequired,
+        user: T.object
     };
 
     static configureScene(route) {
@@ -37,31 +34,42 @@ class App extends Component {
         this.onRouteChange = this.onRouteChange.bind(this);
         this.onSideMenuChange = this.onSideMenuChange.bind(this);
         this.renderScene = this.renderScene.bind(this);
+        this.refresh = this.refresh.bind(this);
+
+        this.getToken().then(token => {
+            this.refresh(token);
+        });
     }
 
     componentDidMount() {
         this.drawer.open();
-        console.log('Calling api/v1/touch');
-        this._touchApi();
+
+        // console.log('Calling api/v1/touch');
+        // this._touchApi();
     }
 
-    async _touchApi() {
-        const { dispatch } = this.props;
-        try {
-            const token = await AsyncStorage.getItem('Y2M:TOKEN');
-            dispatch(touch(token || null));
-        } catch (e) {
-            dispatch(touch());
-        }
+    getToken() {
+        return AsyncStorage.getItem('Y2M:TOKEN').then(token => {
+            return Promise.resolve(token);
+        });
     }
+
+
 
     componentWillReceiveProps(nextProps) {
         if (this.props.ui.isSideMenuOpen && !nextProps.ui.isSideMenuOpen)
             this.drawer.close();
         else if (!this.props.ui.isSideMenuOpen && nextProps.ui.isSideMenuOpen)
             this.drawer.open();
-        console.log(nextProps.ui.isSideMenuOpen);
-        console.log(this.drawer);
+
+        if (!nextProps.user) {
+            console.log('rm token !');
+            this.rmToken().then(this.props.rmToken);
+        }
+        else if (!this.props.user && nextProps.user) {
+            console.log('need to save token ');
+            this.saveToken(nextProps.user.token);
+        }
     }
 
     onNavigatorRef(component) {
@@ -90,11 +98,29 @@ class App extends Component {
         throw new Error('Route not found.');
     }
 
+    rmToken() {
+        return AsyncStorage.removeItem('Y2M:TOKEN');
+    }
+
+    saveToken(token) {
+        return AsyncStorage.setItem('Y2M:TOKEN', token);
+    }
+
+    refresh(token) {
+        this.props.touch(token || this.props.token);
+    }
+
     renderScene(route) {
-        const { toggleSideMenu, ui } = this.props;
+        let { user } = this.props;
+        if (!user)
+            user = { name: '...' }
         return (
             <View style={[styles.sceneView, route.style]}>
-                <Header title={this.getTitle(route)} toggleSideMenu={toggleSideMenu}/>
+                <Header
+                    title={this.getTitle(route)}
+                    refresh={this.refresh}
+                    username={user.name}
+                />
                 <Drawer
                     type="static"
                     ref={ ref => this.drawer = ref }
@@ -124,6 +150,12 @@ class App extends Component {
 
 App = injectIntl(App);
 
-App = connect(state => ({ device: state.device, ui: state.ui }), uiActions)(App);
+App = connect(state => {
+    return ({
+        device: state.device,
+        ui: state.ui,
+        user: state.auth.user
+    });
+}, authActions)(App);
 
 export default start(App);
