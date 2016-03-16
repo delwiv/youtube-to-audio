@@ -3,13 +3,21 @@ import config from '../config/config';
 
 const BASE = config.api;
 
+
+
 export const touch = createAction('AUTH_TOUCH', payload => ({
     promise: fetch(`${BASE}/api/v1/touch`, {
         method: 'GET', headers: { Authorization: payload || '' }
     })
 }));
 
-export const setToken = createAction('AUTH_SET_TOKEN');
+export const me = createAction('AUTH_ME', payload => ({
+    promise: fetch(`${BASE}/api/v1/touch`, {
+        method: 'GET', headers: { Authorization: payload || '' }
+    })
+}));
+
+// export const setToken = createAction('AUTH_SET_TOKEN');
 export const rmToken = createAction('AUTH_RM_TOKEN');
 
 // export function login(fields) {
