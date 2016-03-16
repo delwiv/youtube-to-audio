@@ -32,9 +32,8 @@ User.statics.login = function(creds) {
             user = found;
             return Hash.findOne({ user: user._id }).exec();
         })
-        .then(hash => bcrypt.compareAsync(password, hash.hash, Promise.resolve))
-        .then((err, success) => resolve({ ...user.toObject(), loginStatus: success }))
-    );
+        .then(hash => bcrypt.compare(password, hash.hash, Promise.resolve))
+        .then((err, success) => resolve({ ...user.toObject(), loginStatus: success })));
 };
 
 User.statics.createAnonymous = function() {

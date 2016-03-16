@@ -2,12 +2,10 @@ import { createAction } from 'redux-actions';
 import shortid from 'shortid';
 import { Map } from 'immutable';
 
-export const addPlaylist = createAction('ADD_PLAYLIST', playlist => ({
-    ...playlist,
-    createdAt: new Date(),
-    _id: shortid.generate(),
-    items: new Map()
-}));
+export const addPlaylist = createAction('ADD_PLAYLIST', playlist => {
+    console.log(fetch);
+    // promise: fetch()
+});
 export const addItem = createAction('ADD_ITEM', params => ({
     id: params.id,
     item: {

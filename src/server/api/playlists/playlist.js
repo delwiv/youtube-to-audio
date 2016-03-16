@@ -14,4 +14,11 @@ const Playlist = mongoose.Schema({
     createdAt: Date
 });
 
+Playlist.statics.create = function(playlist) {
+    return new Promise((resolve, reject) => {
+        const p = new this({ ...playlist });
+        console.log(p);
+    })
+};
+
 export default mongoose.model('Playlist', Playlist);

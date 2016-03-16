@@ -2,7 +2,7 @@ import * as actions from './actions';
 import { Record, Map } from 'immutable';
 // import { firebaseActions } from '../lib/redux-firebase';
 import { handleActions } from 'redux-actions';
-import User from './user';
+import getUserFromModel from './user';
 
 const InitialState = Record({
     formDisabled: false,
@@ -29,7 +29,7 @@ export default handleActions({
             return state;
         }
         const { user, token } = JSON.parse(action.payload._bodyText);
-        const record = new User({ ...user, token });
+        const record = getUserFromModel({ ...user, token });
         return state.set('user', record);
     }
 }, initialState);

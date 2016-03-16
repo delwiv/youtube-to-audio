@@ -22,7 +22,10 @@ class App extends Component {
         intl: intlShape.isRequired,
         ui: T.object.isRequired,
         user: T.object,
-        touch: T.func
+        touch: T.func,
+        me: T.func,
+        toggleSideMenu: T.func,
+        onSideMenuChange: T.func
     };
 
     static configureScene(route) {
@@ -58,8 +61,7 @@ class App extends Component {
         if (!nextProps.user) {
             console.log('rm token !');
             this.rmToken().then(this.props.rmToken);
-        }
-        else if (!this.props.user && nextProps.user) {
+        } else if (!this.props.user) {
             console.log(nextProps.user);
             console.log('need to save token ');
             this.saveToken(nextProps.user.token);
@@ -108,9 +110,12 @@ class App extends Component {
     }
 
     refresh(token) {
-        console.log(token);
-        const fallback = this.props.user ? this.props.user.token : null;
-        this.props.touch(token || fallback);
+        // console.log(token);
+        const savedToken = this.props.user ? this.props.user.token : null;
+        if (savedToken)
+            this.props.me(savedToken);
+        else
+            this.props.touch(token || savedToken);
     }
 
     renderScene(route) {

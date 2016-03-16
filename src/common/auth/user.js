@@ -1,5 +1,5 @@
 import { Record, Map } from 'immutable';
-import _ from 'lodash';
+import { getPlaylistsFromModel } from '../playlists/playlist';
 
 const User = Record({
     email: '',
@@ -10,16 +10,12 @@ const User = Record({
     anonymous: true
 });
 
-export const getFromModel = model => {
-    const playlists = new Map();
-    _.forEach(model.playlists, p => {
-        playlists.set(p._id, p);
-    });
+export const getRecordFromModel = model => {
     return new User({
         email: model.email,
         name: model.name,
         token: model.token,
-        playlists: Map(model.playlists),
+        playlists: getPlaylistsFromModel(model.playlists),
         createdAt: model.createdAt,
         anonymous: model.anonymous
     });

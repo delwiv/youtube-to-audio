@@ -1,24 +1,18 @@
-import { Record, Map, Range } from 'immutable';
-import shortid from 'shortid';
+import { Record, Map } from 'immutable';
+import _ from 'lodash';
 
 const Item = Record({
-    _id: shortid.generate(),
+    _id: '',
     name: '',
     url: '',
     videoId: '',
     title: '',
     starred: false,
     duration: 0,
-    status: 'Pending...',
+    status: '',
     progress: 0,
-    currentState: new Record({
-        name: 'Pending...',
-        createdAt: '',
-        progress: 0,
-        remaining: 'processing',
-    }),
-    history: {},
-    createdAt: new Date()
+    history: new Map(),
+    createdAt: ''
 });
 
 export default Item;
