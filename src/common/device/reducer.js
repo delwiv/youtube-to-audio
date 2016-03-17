@@ -1,9 +1,8 @@
 import { Record } from 'immutable';
 
 const InitialState = Record({
-  isMobile: false,
-  platform: '',
-  host: ''
+  host: '',
+  platform: '' // iOS or Android in React Native.
 });
 const initialState = new InitialState;
 
