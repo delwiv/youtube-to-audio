@@ -1,8 +1,8 @@
-import express from 'express';
+import { Router as expressRouter } from 'express';
 import User from './user';
 import bcrypt from 'bcrypt';
 
-const router = express.Router();
+const router = expressRouter();
 
 // Promise.promisifyAll(bcrypt);
 
@@ -11,7 +11,7 @@ router.post('/login', (req, res) => {
         .then(user => {
             req.session.user = user;
             // console.log(req.session);
-            return res.json(user)
+            return res.json(user);
         })
         .catch(err => res.status(401).json(err.message));
 });
@@ -21,12 +21,13 @@ router.post('/logout', (req, res) => {
     return res.status(203).end();
 });
 
-router.post('/me', (req, res) => {
+router.get('/me', (req, res) => {
     // console.log(req.session);
-    if (req.session.user)
-        return res.json(req.session.user);
-    return res.status(401).end();
-})
+    const { user } = req;
+    user.populate('playlists').execPopulate()
+        .then(() => user.populate('playlists.items').execPopulate())
+        .then(() => res.json(user));
+});
 
 
 router.post('/encrypt', (req, res, next) => {

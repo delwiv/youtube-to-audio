@@ -61,6 +61,10 @@ const getScriptHtml = (state, headers, hostname, appJsFilename) =>
 
 const renderPage = (store, renderProps, req) => {
   const state = store.getState();
+  if (process.env.IS_SERVERLESS) {
+    // No server routing for server-less apps.
+    delete state.routing;
+  }
   const { headers, hostname } = req;
   const appHtml = getAppHtml(store, renderProps);
   const helmet = Helmet.rewind();
@@ -85,16 +89,17 @@ const renderPage = (store, renderProps, req) => {
 };
 
 export default function render(req, res, next) {
-  // Detect Heroku protocol
+  const currentLocale = process.env.IS_SERVERLESS
+    ? config.defaultLocale
+    : req.acceptsLanguages(config.locales) || config.defaultLocale;
   const protocol = req.headers['x-forwarded-proto'] || req.protocol;
   const initialState = {
-    // Never pass whole server config to the client.
     config: {
+      appName: config.appName,
       firebaseUrl: config.firebaseUrl
     },
     intl: {
-      // http://formatjs.io/guides/runtime-environments/#user-locale-server
-      currentLocale: req.acceptsLanguages(config.locales) || config.defaultLocale,
+      currentLocale,
       locales: config.locales,
       messages
     },
@@ -109,7 +114,7 @@ export default function render(req, res, next) {
   });
   const history = syncHistoryWithStore(memoryHistory, store);
   // Fetch and dispatch current user here because routes may need it.
-  const routes = createRoutes(() => store.getState());
+  const routes = createRoutes(store.getState);
   const location = req.url;
 
   match({ history, routes, location }, async (error, redirectLocation, renderProps) => {

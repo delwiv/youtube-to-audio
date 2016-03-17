@@ -1,9 +1,10 @@
 <img alt="Este.js" src="https://cloud.githubusercontent.com/assets/66249/6515265/b91f0fb8-c388-11e4-857e-c90902e0b7a1.png" width="200">
 
-[![Circle CI](https://circleci.com/gh/este/este.svg?style=svg)](https://circleci.com/gh/este/este)
+[![Circle CI](https://img.shields.io/circleci/project/este/este/master.svg)](https://circleci.com/gh/este/este)
 [![Join the chat at https://gitter.im/este/este](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/este/este)
 [![Dependency Status](https://david-dm.org/este/este.svg)](https://david-dm.org/este/este)
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![GitHub license](https://img.shields.io/github/license/este/este.svg)](https://github.com/este/este/blob/master/LICENSE)
+[![Deploy](https://img.shields.io/badge/%E2%86%91_Deploy_to-Heroku-7056bf.svg)](https://heroku.com/deploy)
 
 > Happily maintained dev stack and starter kit for React universal apps. One stack for browser, server, mobile.
 
@@ -18,7 +19,7 @@
   - server side rendering
   - universal data fetching
   - optional rendering to HTML files for static hosting
-  - universal internationalization
+  - universal internationalization with runtime language switching
   - universal forms with universal validation (universal ftw, yeah)
 - Functional architecture (immutability, hot reload, time traveling)
 - Test driven development ready
@@ -31,17 +32,19 @@
 
 ## Libraries
 
-- [React](http://facebook.github.io/react/) and [React Native](https://facebook.github.io/react-native/) 
-- [Redux](http://rackt.github.io/redux/)
+- [react](http://facebook.github.io/react/) and [react native](https://facebook.github.io/react-native/) 
+- [redux](http://rackt.github.io/redux/)
 - [babeljs](https://babeljs.io/)
 - [immutablejs](http://facebook.github.io/immutable-js)
 - [react-router](https://github.com/rackt/react-router)
 - [react-router-redux](https://github.com/reactjs/react-router-redux)
+- [react-intl](https://github.com/yahoo/react-intl)
+- [redux-storage](https://github.com/michaelcontento/redux-storage)
 - [webpack](http://webpack.github.io/)
 - [expressjs](http://expressjs.com/)
 - [eslint](http://eslint.org/)
 - [formatjs](http://formatjs.io/) Universal internationalization.
-- [React Helmet](https://github.com/nfl/react-helmet) A document head manager for React.
+- [react-helmet](https://github.com/nfl/react-helmet) A document head manager for React.
 - [webpack-isomorphic-tools](https://github.com/halt-hammerzeit/webpack-isomorphic-tools)
 - [chriso/validator.js](https://github.com/chriso/validator.js) For simple yet powerfull Este sync/async validation.
 - [bluebird](https://github.com/petkaantonov/bluebird) Because it's better than native implementation.
@@ -148,7 +151,6 @@ Just as regular React Native project created via `react-native init AwesomeProje
 ## Training
 - [learn-reactjs.com](http://www.learn-reactjs.com)
 - [javascript-skoleni.cz](http://javascript-skoleni.cz)
-- [DzejEs.cz](http://www.dzejes.cz) - czech articles about Este
 
 ## Notes
 
