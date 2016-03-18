@@ -3,7 +3,24 @@ import React, { View, Text, PropTypes as T } from 'react-native';
 
 // import PlaylistService from '../../services/playlists';
 import InputText from '../../atoms/text-input';
-import Button from '../../atoms/button';
+import { MKTextField, MKButton } from 'react-native-material-kit';
+
+// import Button from '../../atoms/button';
+
+const AddButton = MKButton.coloredFlatButton()
+    .withText('+')
+    .withTextStyle({
+        fontSize: 14
+    })
+    .build();
+
+const PlaylistTextField = MKTextField.textfieldWithFloatingLabel()
+    .withStyle({
+        height: 38,
+        marginTop: 10,
+    })
+    .withPlaceholder('Add a playlist')
+    .build();
 
 export default class NewPlaylistMolecule extends Component {
     static propTypes = {
@@ -33,9 +50,9 @@ export default class NewPlaylistMolecule extends Component {
             <View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <View style={{ flex: 5 }}>
-                        <InputText ref="nameInput" placeholder={'Add a playlist'} onChange={this.handleChange} />
+                        <PlaylistTextField ref="nameInput" onTextChange={this.handleChange} />
                     </View>
-                    <View style={{ flex: 2 }}><Button onPress={this.handleClick} text="GO"/></View>
+                    <View style={{ flex: 2 }}><AddButton onPress={this.handleClick} /></View>
                 </View>
             </View>
         );

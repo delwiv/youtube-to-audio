@@ -1,16 +1,14 @@
 import Component from 'react-pure-render/component';
 import React from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { MKButton } from 'react-native-material-kit';
 
-const {
-    Image,
-    PropTypes,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
-} = React;
+const { Image, PropTypes, StyleSheet, Text, TouchableOpacity, View } = React;
 
+// MK.setTheme({
+//   primaryColor: MKColor.Teal,
+//   accentColor: MKColor.Purple,
+// });
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -30,21 +28,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         flex: 1
     }
-    // menuIcon: {
-    //     backgroundColor: 'transparent',
-    //     height: 24,
-    //     width: 24
-    // },
-    // menuLink: {
-    //     backgroundColor: 'transparent',
-    //     height: 44,
-    //     left: 8,
-    //     opacity: 0.9,
-    //     padding: 10,
-    //     position: 'absolute',
-    //     top: 25,
-    //     width: 44
-    // }
 });
 
 export default class Header extends Component {
@@ -67,6 +50,8 @@ export default class Header extends Component {
     render() {
         const { title, username } = this.props;
 
+        const RefreshButton = MKButton.accentColoredFab().build();
+
         return (
             <View style={styles.container}>
                 <View style={{ flex: 1, flexDirection: 'column' }}>
@@ -79,7 +64,18 @@ export default class Header extends Component {
                     <Text style={styles.header}>{title}</Text>
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Icon style={{ alignSelf: 'flex-end', marginRight: 15 }} name="refresh" size={24} color="white" onPress={this.refresh} />
+                    <RefreshButton
+                        style={{
+                            alignSelf: 'flex-end',
+                            justifyContent: 'center',
+                            marginRight: 15,
+                            width: 32,
+                            height: 32,
+                            alignItems: 'center'
+                        }}
+                        onPress={this.refresh}>
+                        <Icon name="refresh" size={18} color="white" />
+                    </RefreshButton>
                 </View>
             </View>
         );

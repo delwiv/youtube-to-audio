@@ -4,6 +4,7 @@ import linksMessages from '../../common/app/linksMessages';
 import {injectIntl, intlShape} from 'react-intl';
 import NewPlaylist from '../playlists/new-playlist';
 import ListPlaylists from '../playlists/list-playlists';
+import { TextField } from 'react-native-material-kit';
 
 const { PropTypes, ScrollView, StyleSheet, Text, View } = React;
 
