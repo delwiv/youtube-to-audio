@@ -1,11 +1,11 @@
 import { createAction } from 'redux-actions';
 import shortid from 'shortid';
-import { Map } from 'immutable';
+import api from '../config/api';
 
-export const addPlaylist = createAction('ADD_PLAYLIST', playlist => {
-    console.log(fetch);
-    // promise: fetch()
-});
+export const addPlaylist = createAction('ADD_PLAYLIST', payload => ({ promise: api.post('/playlists', payload) }));
+
+export const getPlaylists = createAction('GET_PLAYLISTS', payload => ({ promise: api.get('/playlists', payload) }));
+
 export const addItem = createAction('ADD_ITEM', params => ({
     id: params.id,
     item: {

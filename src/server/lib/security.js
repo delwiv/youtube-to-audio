@@ -36,6 +36,7 @@ export default function security(app) {
     return (req, res, next) => {
         console.log('');
         console.log(`${req.path} -- ${new Date()}`);
+        console.log(`Auth: ${!!req.headers.authorization}`);
         if (!req.headers || !req.headers.authorization) {
             if (req.path === '/api/v1/touch') {
                 User.createAnonymous().then(user => {

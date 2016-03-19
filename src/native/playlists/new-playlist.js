@@ -3,22 +3,21 @@ import React, { View, PropTypes as T } from 'react-native';
 import NewPlaylistMolecule from '../components/molecules/playlists/new';
 import * as actions from '../../common/playlists/actions';
 import { connect } from 'react-redux';
+import { getToken } from '../../common/config/api';
 
 class NewPlaylist extends Component {
     static propTypes = {
-        addPlaylist: T.func
+        addPlaylist: T.func,
+        token: T.string
     };
     constructor() {
         super();
         this.addPlaylist = this.addPlaylist.bind(this);
     }
     addPlaylist(playlist) {
-        // console.log(playlist);
-        this.props.addPlaylist(playlist);
+        this.props.addPlaylist({ playlist, token: this.props.token });
     }
     render() {
-        // console.log(this.state);
-        // console.log(this.props);
         return (
             <View>
                 <NewPlaylistMolecule addPlaylist={this.addPlaylist} />
@@ -27,4 +26,4 @@ class NewPlaylist extends Component {
     }
 }
 
-export default connect(() => ({}), actions)(NewPlaylist);
+export default connect(getToken, actions)(NewPlaylist);

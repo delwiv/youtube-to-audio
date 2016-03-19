@@ -10,6 +10,7 @@ import start from '../../common/app/start';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 import * as authActions from '../../common/auth/actions';
+import * as playlistsActions from '../../common/playlists/actions';
 
 
 // import Sidebar from 'react-sidebar';
@@ -25,7 +26,8 @@ class App extends Component {
         touch: T.func,
         me: T.func,
         toggleSideMenu: T.func,
-        onSideMenuChange: T.func
+        onSideMenuChange: T.func,
+        getPlaylists: T.func
     };
 
     static configureScene(route) {
@@ -62,9 +64,9 @@ class App extends Component {
             console.log('rm token !');
             this.rmToken().then(this.props.rmToken);
         } else if (!this.props.user) {
-            console.log(nextProps.user);
             console.log('need to save token ');
             this.saveToken(nextProps.user.token);
+            this.props.getPlaylists({ token: nextProps.user.token })
         }
     }
 
@@ -113,9 +115,9 @@ class App extends Component {
         // console.log(token);
         const savedToken = this.props.user ? this.props.user.token : null;
         if (savedToken)
-            this.props.me(savedToken);
+            this.props.getPlaylists({ token: savedToken });
         else
-            this.props.touch(token || savedToken);
+            this.props.touch({ token: token || savedToken });
     }
 
     renderScene(route) {
@@ -164,6 +166,6 @@ App = connect(state => {
         ui: state.ui,
         user: state.auth.user
     });
-}, authActions)(App);
+}, { ...authActions, ...playlistsActions })(App);
 
 export default start(App);

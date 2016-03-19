@@ -1,21 +1,8 @@
 import { createAction } from 'redux-actions';
-import config from '../config/config';
+import api from '../config/api';
 
-const BASE = config.api;
-
-
-
-export const touch = createAction('AUTH_TOUCH', payload => ({
-    promise: fetch(`${BASE}/api/v1/touch`, {
-        method: 'GET', headers: { Authorization: payload || '' }
-    })
-}));
-
-export const me = createAction('AUTH_ME', payload => ({
-    promise: fetch(`${BASE}/api/v1/touch`, {
-        method: 'GET', headers: { Authorization: payload || '' }
-    })
-}));
+export const touch = createAction('AUTH_TOUCH', payload => ({ promise: api.get('/touch', payload) }));
+export const me = createAction('AUTH_ME', payload => ({ promise: api.get('/users/me', payload) }));
 
 // export const setToken = createAction('AUTH_SET_TOKEN');
 export const rmToken = createAction('AUTH_RM_TOKEN');

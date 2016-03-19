@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions';
-import Item from './item';
+// import Item from './item';
 import Playlist from './playlist';
 import { Record, Map } from 'immutable';
-import shortid from 'shortid';
+// import shortid from 'shortid';
 
 // const initialItem = new Item({
 //     name: 'Example item',
@@ -32,26 +32,32 @@ const revive = ({ map }) => initialState.merge({
 });
 
 export default handleActions({
-    ADD_PLAYLIST: (state, action) => {
-        const playlist = new Playlist(action.payload);
+    ADD_PLAYLIST_SUCCESS: (state, action) => {
+        const playlist = new Playlist(JSON.parse(action.payload._bodyText));
+        console.log(playlist);
         return state
             .update('map', map => map.set(playlist._id, playlist));
     },
-    SELECT_PLAYLIST: (state, action) => {
-        return state.set('selected', action.payload);
-    },
-    ADD_ITEM: (state, action) => {
-        const { id, item } = action.payload;
+    GET_PLAYLISTS_SUCCESS: (state, action) => {
+        const playlists = new Map(JSON.parse(action.payload._bodyText)).map(p => new Playlist(p));
         return state
-            .update('map', map => map
-            .update(id, playlist => playlist
-            .update('items', i => i.set(item._id, item))
-        ));
-    },
-    SELECT_ITEM: (state, action) => {
-        return {
-            ...state,
-            selectedItem: action.payload
-        };
+            .update('map', map => map.merge(playlists));
     }
+    // SELECT_PLAYLIST: (state, action) => {
+    //     return state.set('selected', action.payload);
+    // },
+    // ADD_ITEM: (state, action) => {
+    //     const { id, item } = action.payload;
+    //     return state
+    //         .update('map', map => map
+    //         .update(id, playlist => playlist
+    //         .update('items', i => i.set(item._id, item))
+    //     ));
+    // },
+    // SELECT_ITEM: (state, action) => {
+    //     return {
+    //         ...state,
+    //         selectedItem: action.payload
+    //     };
+    // }
 }, initialState);

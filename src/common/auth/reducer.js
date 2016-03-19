@@ -1,6 +1,4 @@
-import * as actions from './actions';
-import { Record, Map } from 'immutable';
-// import { firebaseActions } from '../lib/redux-firebase';
+import { Record } from 'immutable';
 import { handleActions } from 'redux-actions';
 import getUserFromModel from './user';
 
@@ -12,10 +10,10 @@ const InitialState = Record({
 const initialState = new InitialState;
 
 export default handleActions({
-    AUTH_SET_TOKEN: (state, action) => {
-        console.log(state);
-        return state.update('user', user => user.set('token', action.payload));
-    },
+    // AUTH_SET_TOKEN: (state, action) => {
+    //     console.log(state);
+    //     return state.update('user', user => user.set('token', action.payload));
+    // },
     AUTH_RM_TOKEN: (state) => state.delete('user'),
     AUTH_TOUCH_ERROR: (state) => state.delete('user'),
     AUTH_TOUCH_SUCCESS: (state, action) => {
