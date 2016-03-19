@@ -9,7 +9,7 @@ class RowPlaylist extends Component {
     };
     render() {
         const { name, items } = this.props.playlist;
-        let size = items.count();
+        let size = items.size || 0;
         if (size > 1)
             size += ' items';
         else

@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 // import Item from './item';
-import Playlist from './playlist';
+import Playlist, { getPlaylistsFromModel } from './playlist';
 import { Record, Map } from 'immutable';
 // import shortid from 'shortid';
 
@@ -34,12 +34,13 @@ const revive = ({ map }) => initialState.merge({
 export default handleActions({
     ADD_PLAYLIST_SUCCESS: (state, action) => {
         const playlist = new Playlist(JSON.parse(action.payload._bodyText));
-        console.log(playlist);
+        // console.log(playlist);
         return state
             .update('map', map => map.set(playlist._id, playlist));
     },
     GET_PLAYLISTS_SUCCESS: (state, action) => {
-        const playlists = new Map(JSON.parse(action.payload._bodyText)).map(p => new Playlist(p));
+        // console.log(JSON.parse(action.payload._bodyText));
+        const playlists = getPlaylistsFromModel(JSON.parse(action.payload._bodyText));
         return state
             .update('map', map => map.merge(playlists));
     }

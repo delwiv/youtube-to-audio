@@ -22,7 +22,7 @@ TokenSchema.statics.getSecret = function() {
 const Token = mongoose.model('Token', TokenSchema);
 
 Token.find().exec().then(data => !data.length ? Token.create({ secret: shortid.generate() }) : Promise.resolve(data[0]))
-    .then(token => console.log(`Token was created on ${token.createdAt}`));
+    .then(token => console.log(`Token was created on ${token.createdAt}\n`));
 
 const redisClient = redis.createClient();
 
@@ -34,9 +34,9 @@ export default function security(app) {
     }
 
     return (req, res, next) => {
-        console.log('');
-        console.log(`${req.path} -- ${new Date()}`);
-        console.log(`Auth: ${!!req.headers.authorization}`);
+        // console.log('');
+        console.log(`${new Date()} ${req.method}\t${req.path}`);
+        // console.log(`Auth: ${!!req.headers.authorization}`);
         if (!req.headers || !req.headers.authorization) {
             if (req.path === '/api/v1/touch') {
                 User.createAnonymous().then(user => {
@@ -69,7 +69,7 @@ export default function security(app) {
                     }
                     return User.findById(JSON.parse(id)).exec()
                     .then(user => {
-                        console.log('user found: ' + user.name + ' ' + user._id);
+                        // console.log('user found: ' + user.name + ' ' + user._id);
                         req.user = user;
                         redisClient.expire(`token:${req.token}`, SEVEN_DAYS, () => {
                             if (req.path === '/api/v1/touch')

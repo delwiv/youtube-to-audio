@@ -14,15 +14,14 @@ const Playlist = Record({
 });
 
 export const getPlaylistsFromModel = playlists => {
-    const result = new Map();
-    _.forEach(playlists, pl => {
+    let result = new Map();
+    playlists.forEach(pl => {
         const items = new Map();
-        _.forEach(items, i => items.set(i._id, new Item(i)));
-
-        result.set(pl._id, new Playlist({ ...pl, items }));
+        pl.items.forEach(i => items.set(i._id, new Item(i)));
+        const p = new Playlist({ ...pl, items });
+        result = result.set(p._id, p);
 
     });
-
     return result;
 };
 

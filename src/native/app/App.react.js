@@ -61,10 +61,8 @@ class App extends Component {
             this.drawer.open();
 
         if (!nextProps.user) {
-            console.log('rm token !');
             this.rmToken().then(this.props.rmToken);
         } else if (!this.props.user) {
-            console.log('need to save token ');
             this.saveToken(nextProps.user.token);
             this.props.getPlaylists({ token: nextProps.user.token })
         }

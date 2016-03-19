@@ -18,9 +18,9 @@ export default handleActions({
     AUTH_TOUCH_ERROR: (state) => state.delete('user'),
     AUTH_TOUCH_SUCCESS: (state, action) => {
         const { status } = action.payload;
-        console.log(status);
+        // console.log(status);
         if (status === 401) {
-            console.log('delete token');
+            // console.log('delete token');
             return state.delete('token');
         }
         if (status !== 200) {
