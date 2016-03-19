@@ -21,8 +21,8 @@ import { Record, Map } from 'immutable';
 // });
 
 const InitialState = Record({
-    map: new Map() /* .set(initialPlaylist._id, initialPlaylist),
-    selected: initialPlaylist._id*/
+    map: new Map(),
+    selected: null
 });
 
 const initialState = new InitialState;
@@ -43,22 +43,22 @@ export default handleActions({
         const playlists = getPlaylistsFromModel(JSON.parse(action.payload._bodyText));
         return state
             .update('map', map => map.merge(playlists));
+    },
+    SELECT_PLAYLIST: (state, action) => {
+        return state.set('selected', action.payload);
+    },
+    ADD_ITEM: (state, action) => {
+        const { id, item } = action.payload;
+        return state
+            .update('map', map => map
+            .update(id, playlist => playlist
+            .update('items', i => i.set(item._id, item))
+        ));
+    },
+    SELECT_ITEM: (state, action) => {
+        return {
+            ...state,
+            selectedItem: action.payload
+        };
     }
-    // SELECT_PLAYLIST: (state, action) => {
-    //     return state.set('selected', action.payload);
-    // },
-    // ADD_ITEM: (state, action) => {
-    //     const { id, item } = action.payload;
-    //     return state
-    //         .update('map', map => map
-    //         .update(id, playlist => playlist
-    //         .update('items', i => i.set(item._id, item))
-    //     ));
-    // },
-    // SELECT_ITEM: (state, action) => {
-    //     return {
-    //         ...state,
-    //         selectedItem: action.payload
-    //     };
-    // }
 }, initialState);

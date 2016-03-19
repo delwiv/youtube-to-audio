@@ -13,7 +13,8 @@ import ListItems from './list-items';
 export default class Page extends Component {
     static propTypes = {
         playlist: T.object,
-        addItem: T.func
+        addItem: T.func,
+        token: T.string
     };
     constructor(props) {
         super(props);
@@ -21,7 +22,8 @@ export default class Page extends Component {
     }
     addItem(item) {
         const id = this.props.playlist._id;
-        this.props.addItem({ id, item });
+        const { token } = this.props;
+        this.props.addItem({ token, id, item });
     }
     render() {
         const { playlist } = this.props;
@@ -29,7 +31,7 @@ export default class Page extends Component {
             <View style={[appStyles.container]}>
                 {playlist && <View>
                     <Text>{playlist.name}</Text>
-                    <NewItem addItem={this.addItem}/>
+                    <NewItem addItem={this.addItem} onPress={this.props.closeDrawer}/>
                     {playlist.items && <ListItems items={playlist.items} />}
                 </View>}
             </View>
@@ -38,7 +40,10 @@ export default class Page extends Component {
 
 }
 
-export default connect(state => ({ playlist: state.playlists.map.get(state.playlists.selected) }), actions)(Page);
+export default connect(state => ({
+    playlist: state.playlists.map.get(state.playlists.selected),
+    token: state.auth.user ? state.auth.user.token : ''
+}), actions)(Page);
 
 
 // Truly universal (not only isomorphic) data fetching.

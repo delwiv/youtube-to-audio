@@ -77,8 +77,12 @@ class App extends Component {
         this.props.toggleSideMenu();
     }
 
-    onSideMenuChange() {
-        this.props.onSideMenuChange();
+    onSideMenuChange(forceClose) {
+        this.props.onSideMenuChange(forceClose);
+    }
+
+    closeDrawer() {
+        this.onSideMenuChange(true);
     }
 
     getTitle(route) {
@@ -139,7 +143,7 @@ class App extends Component {
                     tweenHandler={Drawer.tweenPresets.parallax}
                 >
                     <ScrollView style={{ padding: 10, marginBottom: 5 }}>
-                        <route.Page />
+                        <route.Page closeDrawer={this.closeDrawer}/>
                     </ScrollView>
                 </Drawer>
             </View>
