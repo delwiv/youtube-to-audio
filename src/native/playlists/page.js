@@ -31,7 +31,7 @@ export default class Page extends Component {
             <View style={[appStyles.container]}>
                 {playlist && <View>
                     <Text>{playlist.name}</Text>
-                    <NewItem addItem={this.addItem} onPress={this.props.closeDrawer}/>
+                    <NewItem addItem={this.addItem} onPress={this.props.closeDrawer} />
                     {playlist.items && <ListItems items={playlist.items} />}
                 </View>}
             </View>

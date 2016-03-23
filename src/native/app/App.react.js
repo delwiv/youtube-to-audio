@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 import * as authActions from '../../common/auth/actions';
 import * as playlistsActions from '../../common/playlists/actions';
+import * as uiActions from '../../common/ui/actions';
 
 
 // import Sidebar from 'react-sidebar';
@@ -55,8 +56,10 @@ class App extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.ui.isSideMenuOpen && !nextProps.ui.isSideMenuOpen)
+        if (this.props.ui.isSideMenuOpen && !nextProps.ui.isSideMenuOpen) {
+            console.log('closing drawer');
             this.drawer.close();
+        }
         else if (!this.props.ui.isSideMenuOpen && nextProps.ui.isSideMenuOpen)
             this.drawer.open();
 
@@ -82,7 +85,7 @@ class App extends Component {
     }
 
     closeDrawer() {
-        this.onSideMenuChange(true);
+        this.drawer.close();
     }
 
     getTitle(route) {
@@ -138,12 +141,11 @@ class App extends Component {
                     ref={ ref => this.drawer = ref }
                     content={<Menu onRouteChange={this.onRouteChange} />}
                     openDrawerOffset={ 0.55 }
-                    closedDrawerOffset={ 0 }
                     styles={{ main: { shadowColor: '#000000', shadowOpacity: 0.4, shadowRadius: 3 } }}
                     tweenHandler={Drawer.tweenPresets.parallax}
                 >
                     <ScrollView style={{ padding: 10, marginBottom: 5 }}>
-                        <route.Page closeDrawer={this.closeDrawer}/>
+                        <route.Page closeDrawer={this.closeDrawer} />
                     </ScrollView>
                 </Drawer>
             </View>
@@ -168,6 +170,6 @@ App = connect(state => {
         ui: state.ui,
         user: state.auth.user
     });
-}, { ...authActions, ...playlistsActions })(App);
+}, { ...authActions, ...playlistsActions, ...uiActions })(App);
 
 export default start(App);

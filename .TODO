@@ -1,0 +1,3 @@
+rename video with uuid
+store in redis uuid -> filename
+ --> no shit with spaces and others characters

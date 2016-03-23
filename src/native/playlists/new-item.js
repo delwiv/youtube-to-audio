@@ -4,11 +4,25 @@ import InputText from '../components/atoms/text-input';
 import Button from '../components/atoms/button';
 import { connect } from 'react-redux';
 import validator from 'validator';
+import { MKButton, MKTextField } from 'react-native-material-kit';
 
 const validatorOptions = {
     protocols: ['http', 'https'],
     host_whitelist: ['youtube.com', 'youtu.be']
 };
+
+const AddButton = MKButton.coloredButton()
+    .withText('Go !')
+    .build();
+
+const ItemTextField = MKTextField.textfield()
+    .withStyle({
+        height: 38,
+        marginTop: 10,
+    })
+    .withPlaceholder('Add an item')
+    .withOnSubmitEditing(() => console.log('Submit!'))
+    .build();
 
 class NewItem extends Component {
     static propTypes = {
@@ -40,19 +54,32 @@ class NewItem extends Component {
             progress: 0,
             status: 'Pending...'
         }
-        this.props.addItem(newItem);
         this.setState({ url: '' });
-        this.refs.nameInput.reset();
+        this.props.addItem(newItem);
     }
     render() {
-        const { validated } = this.state;
+        const { validated, url } = this.state;
         return (
             <View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View style={{ flex: 3 }}>
-                        <InputText ref="nameInput" placeholder={'Add an item'} onChange={this.handleChange} />
+                <View onPress={this.props.onPress}>
+                    <View>
+                        <ItemTextField text={url} onChangeText={this.handleChange} />
                     </View>
-                    <View style={{ flex: 1 }}>{validated && <Button onPress={this.handleClick} text="GO"/>}</View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flex: 1 }}>
+                            {validated &&
+                                <AddButton
+                                    style={{
+                                        justifyContent: 'center',
+                                        height: 32,
+                                        margin: 5,
+                                        alignItems: 'center'
+                                    }}
+                                    onPress={this.handleClick} />
+                            }
+                        </View>
+                        <View style={{ flex: 3 }} />
+                    </View>
                 </View>
             </View>
         );

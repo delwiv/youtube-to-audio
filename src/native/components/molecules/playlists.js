@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 class Playlists extends Component {
     static propTypes = {
-        playlists: T.array,
+        playlists: T.object,
         addPlaylist: T.func,
         selectPlaylist: T.func
     };

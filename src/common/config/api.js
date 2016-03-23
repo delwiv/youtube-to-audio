@@ -1,4 +1,5 @@
 import createFetch from '../createFetch';
+import jc from 'json-cycle';
 // import _ from 'lodash';
 
 const apiUrl = 'http://localhost:8000/api/v1';
@@ -13,9 +14,10 @@ const makeCall = (route, params) => {
         headers: params.headers,
         method: params.method
     };
-    if (params.method !== 'GET')
-        options.body = JSON.stringify(params.params);
-
+    if (params.method !== 'GET') {
+        options.body = JSON.stringify(jc.decycle(params.params));
+        // console.log(options.body);
+    }
     console.log(`${params.method} ${route}`);
     // console.log(params);
     // console.log(options);

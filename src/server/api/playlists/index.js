@@ -1,26 +1,22 @@
-// import { Playlist as IMPlaylist } from '../../../common/playlists/playlist';
 import Playlist from './playlist';
-// import { Item  as IMItem } from '../../../common/playlists/item';
 import { Router as expressRouter } from 'express';
+import { startDownload } from '../../lib/video-manager';
 
 const router = expressRouter();
 
-router.get('/:id', (req, res) => Playlist
-    .findById(req.params.id)
-    .populate('items')
-    .exec()
-    .then(playlist => playlist ?
-        res.json(playlist) :
-        res.status(404).end()));
-
-router.get('/', (req, res, next) => req.user
-    .populate('playlists')
+router.get('/', (req, res, next) => {
+    req.user
+    .populate({
+        path: 'playlists',
+        populate: {
+            path: 'items',
+            model: 'Item'
+        }
+    })
     .execPopulate()
-    .then(() => req.user
-        .populate('items')
-        .execPopulate()
-        .then(() => res.json(req.user.playlists))
-    ).catch(err => next(err)));
+    .then(user => res.json(user.playlists))
+    .catch(err => next(err));
+});
 
 router.post('/', (req, res, next) => Playlist
         .create(req.body.playlist)
@@ -30,7 +26,26 @@ router.post('/', (req, res, next) => Playlist
             return user.save()
             .then(() => res.json(playlist));
         })
-        .catch(err => next(err))
-);
+        .catch(err => next(err)));
+
+router.get('/:id', (req, res) => Playlist
+    .findById(req.params.id)
+    .populate('items')
+    .exec()
+    .then(playlist => playlist ?
+        res.json(playlist) :
+        res.status(404).end()));
+
+router.post('/:id/items', (req, res, next) => Playlist
+    .findById(req.params.id)
+    .exec()
+    .then(playlist => playlist ?
+        playlist.addItem(req.body.item) : res.status(404).end())
+        .then(result => Promise.all([
+            startDownload(result[1].url),
+            result[1].populate('items').execPopulate()
+        ]))
+        .then(result => res.json(result[1]))
+    .catch(err => next(err)));
 
 export default router;

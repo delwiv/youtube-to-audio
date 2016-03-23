@@ -11,7 +11,7 @@ export const getPlaylists = createAction('GET_PLAYLISTS', payload => ({
 }));
 
 export const addItem = createAction('ADD_ITEM', payload => ({
-    promise: api.post(`/playlists/${payload.id}`, payload)
+    promise: api.post(`/playlists/${payload.id}/items`, payload)
 }));
 
 export const selectPlaylist = createAction('SELECT_PLAYLIST');

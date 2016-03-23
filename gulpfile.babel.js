@@ -71,7 +71,7 @@ gulp.task('server-hot', bg('node', './webpack/server'));
 // Shell fixes Windows este/issues/522, bg is still needed for server-hot.
 gulp.task('server-nodemon', shell.task(
   // Normalize makes path cross platform.
-  path.normalize('node_modules/.bin/nodemon --ignore webpack-assets.json src/server')
+  path.normalize('node_modules/.bin/nodemon --ignore webpack-assets.json --ignore native/ --ignore common/ --ignore browser/ src/server')
 ));
 
 gulp.task('server', ['env'], done => {

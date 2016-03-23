@@ -1,3 +1,4 @@
+import { createAction } from 'redux-actions';
 export const ON_SIDE_MENU_CHANGE = 'ON_SIDE_MENU_CHANGE';
 export const TOGGLE_SIDE_MENU = 'TOGGLE_SIDE_MENU';
 
@@ -15,3 +16,5 @@ export function toggleSideMenu() {
         type: TOGGLE_SIDE_MENU
     };
 }
+
+export const closeDrawer = createAction('CLOSE_DRAWER');

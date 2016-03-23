@@ -5,12 +5,21 @@ const Item = mongoose.Schema({
     url: String,
     videoId: String,
     title: String,
-    starred: Boolean,
+    starred: {
+        type: Boolean,
+        default: false
+    },
     duration: Number,
     status: String,
     progress: Number,
     history: {},
-    createdAt: Date
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+}, {
+    strict: true,
+    collection: 'items'
 });
 
-mongoose.mondel('Item', Item);
+export default mongoose.model('Item', Item);
