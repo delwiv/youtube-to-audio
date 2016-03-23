@@ -1,10 +1,8 @@
-import youtubedl from 'youtube-dl';
 import path from 'path';
-import fs from 'fs';
 import kue from 'kue';
-import ffmpeg from 'ffmpeg';
+import Encoder from './encoder';
+import Downloader from './downloader';
 import mv from 'mv';
-
 
 const NB_PARALLEL_DOWNLOADS = 4;
 const NB_PARALLEL_CONVERTIONS = 4;
@@ -21,6 +19,7 @@ export const startDownload = (link, userId) => {
 
 const startConvert = params => {
     const { filename, userId } = params;
+    console.log(`start encoding ${filename}`);
     jobs.create('convert', {
         title: `Converting ${filename}`,
         filename,
@@ -30,69 +29,48 @@ const startConvert = params => {
 
 jobs.process('download', NB_PARALLEL_DOWNLOADS, (job, done) => {
     const { link, userId } = job.data;
+    const output = path.join(__dirname, '../storage/downloading');
 
-    const video = youtubedl(link, ['--force-ipv4', '--format=18'], {});
-    video.on('info', info => {
-        const size = info.size;
-        const filename = info._filename;
-        console.log('Download started');
-        console.log(`filename:  ${filename}`);
-        console.log(`size:  ${size}`);
-        // console.log(info);
+    const dl = new Downloader(link, output);
 
-        video.custom = {
-            output: path.join(__dirname, `../storage/downloading/${filename}`),
-            filename,
-            pos: 0,
-            size: info.size
-        };
+    let videoFilename = '';
 
-        video.pipe(fs.createWriteStream(video.custom.output));
-
-        video.on('data', data => {
-            video.custom.pos += data.length;
-            // `size` should not be 0 here.
-            if (video.custom.size) {
-                video.custom.percent = (video.custom.pos / video.custom.size * 100).toFixed(2);
-                // process.stdout.cursorTo(0);
-                // process.stdout.clearLine(1);
-                console.log(`${video.custom.percent}% - ${video.custom.filename}`);
-                // console.log(data);
-
-            }
-        });
-
-        video.on('end', () => {
+    dl.download(
+        info => {
+            const { size, filename } = info;
+            videoFilename = filename;
+            console.log('Download started');
+            console.log(`filename:  ${filename}`);
+            console.log(`size:  ${size}`);
+        },
+        progress => {
+            console.log(`${progress}% - ${videoFilename}`);
+        },
+        () => {
             console.log('DL finished');
-            video.custom.status = 'converting';
-            video.custom.percent = 100;
-            mv(video.custom.output, `${__dirname}/../storage/downloaded/${filename}`, err => {
+            const downloadedFile = path.join(__dirname, `../storage/downloaded/${videoFilename}`);
+            mv(`${output}/${videoFilename}`, downloadedFile, err => {
                 if (err) console.log(err);
                 console.log('start converting');
-                console.log(filename);
-                startConvert({ filename, userId });
+                console.log(downloadedFile);
+                startConvert({ filename: path.basename(downloadedFile), userId });
                 done();
             });
         });
-    });
 });
 
 jobs.process('convert', NB_PARALLEL_CONVERTIONS, (job, done) => {
     const { filename, userId } = job.data;
 
-    try {
-        new ffmpeg(path.join(__dirname, `../storage/downloaded/${filename}`))
-            .then(video => video
-                .fnExtractSoundToMP3(path.join(__dirname, `../storage/audio/${filename}`), (err, file) => {
-                    console.log(`conversion finished : ${file} - err : ${err}`);
-                    done();
-                })
-            , err => {
-                console.log(err);
-                done();
-            });
-    } catch (e) {
-        console.log(e);
-        done();
-    }
+    const ext = path.extname(filename);
+
+    const input = path.join(__dirname, `../storage/downloaded/${filename}`);
+    const output = path.join(__dirname, `../storage/audio/${filename.replace(ext, '.m4a')}`);
+
+    const encoder = new Encoder(input, output);
+
+    encoder.encode(progress => console.log(`progress: ${progress} - ${filename}`), (err, success, dest) => {
+        console.log('encoding finished');
+        console.log(`file: ${dest}`);
+    })
 });
