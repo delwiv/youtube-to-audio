@@ -14,7 +14,8 @@ export default class Page extends Component {
     static propTypes = {
         playlist: T.object,
         addItem: T.func,
-        token: T.string
+        token: T.string,
+        userId: T.string
     };
     constructor(props) {
         super(props);
@@ -22,8 +23,8 @@ export default class Page extends Component {
     }
     addItem(item) {
         const id = this.props.playlist._id;
-        const { token } = this.props;
-        this.props.addItem({ token, id, item });
+        const { token, userId } = this.props;
+        this.props.addItem({ token, id, item, userId });
     }
     render() {
         const { playlist } = this.props;
@@ -42,7 +43,8 @@ export default class Page extends Component {
 
 export default connect(state => ({
     playlist: state.playlists.map.get(state.playlists.selected),
-    token: state.auth.user ? state.auth.user.token : ''
+    token: state.auth.user ? state.auth.user.token : '',
+    userId: state.auth.user ? state.auth.user._id : ''
 }), actions)(Page);
 
 

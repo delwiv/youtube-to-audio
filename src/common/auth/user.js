@@ -2,6 +2,7 @@ import { Record, Map } from 'immutable';
 import { getPlaylistsFromModel } from '../playlists/playlist';
 
 const User = Record({
+    _id: '',
     email: '',
     name: '',
     token: '',
@@ -12,6 +13,7 @@ const User = Record({
 
 export const getRecordFromModel = model => {
     return new User({
+        _id: model._id,
         email: model.email,
         name: model.name,
         token: model.token,

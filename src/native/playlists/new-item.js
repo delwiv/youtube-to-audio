@@ -75,7 +75,8 @@ class NewItem extends Component {
                                         margin: 5,
                                         alignItems: 'center'
                                     }}
-                                    onPress={this.handleClick} />
+                                    onPress={this.handleClick}
+                                />
                             }
                         </View>
                         <View style={{ flex: 3 }} />

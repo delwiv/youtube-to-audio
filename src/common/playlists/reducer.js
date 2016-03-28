@@ -40,5 +40,15 @@ export default handleActions({
             ...state,
             selectedItem: action.payload
         };
+    },
+    SET_PROGRESS: (state, action) => {
+        const { playlistId, itemId, progress, status } = action.payload;
+        const progressItem = state.map.get(playlistId).items.get(itemId)
+            .set('progress', parseInt(progress, 10))
+            .set('status', status);
+        return state.update('map', map => map
+            .update(playlistId, pl => pl
+                .update('items', items => items.set(itemId, progressItem))
+        ));
     }
 }, initialState);

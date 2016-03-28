@@ -19,9 +19,8 @@ export const getPlaylistsFromModel = playlists => {
         playlists = [playlists];
     playlists.forEach(pl => {
         let items = new Map();
-        pl.items.forEach(i => {
-            items = items.set(i._id, new Item(i));
-        });
+        if (pl.items.length > 0)
+            pl.items.forEach(i => { items = items.set(i._id, new Item(i)); });
         // console.log(items);
         const p = new Playlist({ ...pl, items });
         result = result.set(p._id, p);

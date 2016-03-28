@@ -12,10 +12,8 @@ import { injectIntl, intlShape } from 'react-intl';
 import * as authActions from '../../common/auth/actions';
 import * as playlistsActions from '../../common/playlists/actions';
 import * as uiActions from '../../common/ui/actions';
-
-
-// import Sidebar from 'react-sidebar';
-
+// import ws from '../realtime/realtime';
+import io from 'socket.io-client/socket.io';
 
 class App extends Component {
 
@@ -28,7 +26,8 @@ class App extends Component {
         me: T.func,
         toggleSideMenu: T.func,
         onSideMenuChange: T.func,
-        getPlaylists: T.func
+        getPlaylists: T.func,
+        setProgress: T.func
     };
 
     static configureScene(route) {
@@ -43,6 +42,7 @@ class App extends Component {
         this.renderScene = this.renderScene.bind(this);
         this.refresh = this.refresh.bind(this);
 
+
         this.getToken().then(token => {
             this.refresh(token);
         });
@@ -50,9 +50,6 @@ class App extends Component {
 
     componentDidMount() {
         this.drawer.open();
-
-        // console.log('Calling api/v1/touch');
-        // this._touchApi();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -67,7 +64,15 @@ class App extends Component {
             this.rmToken().then(this.props.rmToken);
         } else if (!this.props.user) {
             this.saveToken(nextProps.user.token);
-            this.props.getPlaylists({ token: nextProps.user.token })
+            this.props.getPlaylists({ token: nextProps.user.token });
+            this.io = io('localhost:9994', { jsonp: false });
+            this.io.on('who', () => {
+                this.io.emit('id', { id: nextProps.user._id });
+            });
+            this.io.on('progress', p => {
+                // console.log(p);
+                this.props.setProgress(p);
+            });
         }
     }
 
@@ -117,7 +122,6 @@ class App extends Component {
     }
 
     refresh(token) {
-        // console.log(token);
         const savedToken = this.props.user ? this.props.user.token : null;
         if (savedToken)
             this.props.getPlaylists({ token: savedToken });
@@ -153,10 +157,14 @@ class App extends Component {
     }
 
     render() {
-
         return (
-            <Navigator configureScene={App.configureScene}
-                initialRoute={routes.playlists} ref={this.onNavigatorRef} renderScene={this.renderScene} style={styles.container} />
+            <Navigator
+                configureScene={App.configureScene}
+                initialRoute={routes.playlists}
+                ref={this.onNavigatorRef}
+                renderScene={this.renderScene}
+                style={styles.container}
+            />
         );
     }
 

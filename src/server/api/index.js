@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import playlists from './playlists';
+require('../realtime');
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use('/users', users);
 app.use('/playlists', playlists);
 
 app.on('mount', () => {
-  console.log('Api is available at %s', app.mountpath);
+    console.log('Api is available at %s', app.mountpath);
 });
 
 export default app;

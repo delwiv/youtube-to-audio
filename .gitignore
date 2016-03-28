@@ -38,3 +38,7 @@ webpack-assets.json
 
 # firebase
 firebase/rules.json
+
+src/server/storage/downloading/*
+src/server/storage/downloaded/*
+src/server/storage/audio/*

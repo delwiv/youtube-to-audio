@@ -3,32 +3,39 @@ import kue from 'kue';
 import Encoder from './encoder';
 import Downloader from './downloader';
 import mv from 'mv';
+import { sendProgress } from '../realtime';
 
 const NB_PARALLEL_DOWNLOADS = 4;
 const NB_PARALLEL_CONVERTIONS = 4;
 
 const jobs = kue.createQueue();
 
-export const startDownload = (link, userId) => {
+export const startDownload = params => {
+    const { item, userId, playlistId } = params;
     jobs.create('download', {
-        title: `Downloading ${link}`,
-        link,
-        userId
+        title: `Downloading ${item.url}`,
+        link: item.url,
+        itemId: item._id,
+        userId,
+        playlistId
     }).save();
+    return Promise.resolve();
 };
 
 const startConvert = params => {
-    const { filename, userId } = params;
+    const { filename, userId, playlistId, itemId } = params;
     console.log(`start encoding ${filename}`);
     jobs.create('convert', {
         title: `Converting ${filename}`,
         filename,
-        userId
+        userId,
+        itemId,
+        playlistId
     }).save();
 };
 
 jobs.process('download', NB_PARALLEL_DOWNLOADS, (job, done) => {
-    const { link, userId } = job.data;
+    const { link, userId, itemId, playlistId } = job.data;
     const output = path.join(__dirname, '../storage/downloading');
 
     const dl = new Downloader(link, output);
@@ -44,7 +51,8 @@ jobs.process('download', NB_PARALLEL_DOWNLOADS, (job, done) => {
             console.log(`size:  ${size}`);
         },
         progress => {
-            console.log(`${progress}% - ${videoFilename}`);
+            // console.log(`${progress}% - ${videoFilename}`);
+            sendProgress({ userId, progress, itemId, playlistId, status: 'Downloading' });
         },
         () => {
             console.log('DL finished');
@@ -53,14 +61,14 @@ jobs.process('download', NB_PARALLEL_DOWNLOADS, (job, done) => {
                 if (err) console.log(err);
                 console.log('start converting');
                 console.log(downloadedFile);
-                startConvert({ filename: path.basename(downloadedFile), userId });
+                startConvert({ filename: path.basename(downloadedFile), userId, itemId, playlistId });
                 done();
             });
         });
 });
 
 jobs.process('convert', NB_PARALLEL_CONVERTIONS, (job, done) => {
-    const { filename, userId } = job.data;
+    const { filename, userId, playlistId, itemId } = job.data;
 
     const ext = path.extname(filename);
 
@@ -69,8 +77,12 @@ jobs.process('convert', NB_PARALLEL_CONVERTIONS, (job, done) => {
 
     const encoder = new Encoder(input, output);
 
-    encoder.encode(progress => console.log(`progress: ${progress} - ${filename}`), (err, success, dest) => {
+    encoder.encode(progress => {
+        // console.log(`progress: ${progress} - ${filename}`);
+        sendProgress({ userId, progress, playlistId, itemId, status: 'Encoding' });
+    }, (err, success, dest) => {
         console.log('encoding finished');
         console.log(`file: ${dest}`);
+        done();
     })
 });

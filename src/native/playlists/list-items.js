@@ -8,11 +8,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bar } from 'react-native-progress';
 import { getTheme } from 'react-native-material-kit';
 
-const { cardStyle } = getTheme().cardStyle;
-console.log(cardStyle);
-// cardStyle.margin = 5;
-// cardStyle.backgroundColor = '#d9d9d9';
-
 class ItemCard extends Component {
     static propTypes = {
         item: T.object
@@ -49,8 +44,8 @@ class ItemCard extends Component {
                         <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 5 }} />
                         <View style={{ flex: 2, flexDirection: 'column', paddingLeft: 5, width: statusWidth }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                                <Text>{100}%</Text>
-                                <Bar progress={item.progress} indeterminate={item.progress === 0} width={statusWidth} />
+                                <Text>{item.progress}%</Text>
+                                <Bar progress={item.progress / 100} indeterminate={item.progress === 0} width={statusWidth} />
                             </View>
                             <View style={{ flexDirection: 'row',
                                 justifyContent: 'space-between',
@@ -88,7 +83,7 @@ class ListItems extends Component {
     render() {
         return (
             <View>
-                {this.props.items && this.props.items.length > 0 && this.props.items.toList().map((item, key) => <ItemCard item={item} key={key} />)}
+                {this.props.items && this.props.items.size > 0 && this.props.items.toList().map((item, key) => <ItemCard item={item} key={key} />)}
             </View>
         );
     }
